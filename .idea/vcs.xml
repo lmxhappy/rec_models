@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="VcsDirectoryMappings">
-    <mapping directory="$PROJECT_DIR$/EGES_2" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ComiRec" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/attentional_factorization_machine" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/collaborative-filtering/AutoRec" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/collaborative-filtering/Autorec_tf" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/collaborative-filtering/neural_collaborative_filtering" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/collaborative-filtering/review-on-collaborative-filtering" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/eges/EGES_2" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/item2vec" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/neural_factorization_machine" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/tensorflow-DeepFM" vcs="Git" />
   </component>
 </project>

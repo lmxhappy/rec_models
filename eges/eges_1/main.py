@@ -1,4 +1,3 @@
-import dgl
 import torch as th
 import torch.optim as optim
 import utils

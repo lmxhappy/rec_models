@@ -1,0 +1,84 @@
+2023-06-06 16:08:08,966 P74006 INFO Params: {
+    "batch_norm": "False",
+    "batch_size": "128",
+    "data_format": "h5",
+    "data_root": "../../data/",
+    "dataset_id": "tiny_h5",
+    "debug_mode": "False",
+    "dnn_activations": "relu",
+    "early_stop_patience": "2",
+    "embedding_dim": "4",
+    "embedding_regularizer": "1e-08",
+    "epochs": "1",
+    "eval_steps": "None",
+    "feature_config": "None",
+    "feature_specs": "None",
+    "gpu": "-1",
+    "group_id": "None",
+    "learning_rate": "0.001",
+    "loss": "binary_crossentropy",
+    "metrics": "['logloss', 'AUC']",
+    "model": "DeepCrossing",
+    "model_id": "DeepCrossing_test",
+    "model_root": "./checkpoints/",
+    "monitor": "AUC",
+    "monitor_mode": "max",
+    "net_dropout": "0",
+    "net_regularizer": "0",
+    "num_workers": "3",
+    "optimizer": "adam",
+    "pickle_feature_encoder": "True",
+    "residual_blocks": "[64, 64, 64]",
+    "save_best_only": "True",
+    "seed": "2019",
+    "shuffle": "True",
+    "task": "binary_classification",
+    "test_data": "../../data/tiny_h5/test.h5",
+    "train_data": "../../data/tiny_h5/train.h5",
+    "use_features": "None",
+    "use_residual": "True",
+    "valid_data": "../../data/tiny_h5/valid.h5",
+    "verbose": "1"
+}
+2023-06-06 16:08:08,969 P74006 INFO Load feature_map from json: ../../data/tiny_h5/feature_map.json
+2023-06-06 16:08:08,970 P74006 INFO Set column index...
+2023-06-06 16:08:08,970 P74006 INFO Feature specs: {
+    "adgroup_id": "{'source': 'item', 'type': 'categorical', 'padding_idx': 0, 'oov_idx': 95, 'vocab_size': 96}",
+    "age_level": "{'source': 'user', 'type': 'categorical', 'padding_idx': 0, 'oov_idx': 6, 'vocab_size': 7}",
+    "brand": "{'source': 'item', 'type': 'categorical', 'padding_idx': 0, 'oov_idx': 66, 'vocab_size': 67}",
+    "campaign_id": "{'source': 'item', 'type': 'categorical', 'padding_idx': 0, 'oov_idx': 98, 'vocab_size': 99}",
+    "cate_id": "{'source': 'item', 'type': 'categorical', 'padding_idx': 0, 'oov_idx': 48, 'vocab_size': 49}",
+    "cms_group_id": "{'source': 'user', 'type': 'categorical', 'padding_idx': 0, 'oov_idx': 10, 'vocab_size': 11}",
+    "cms_segid": "{'source': 'user', 'type': 'categorical', 'padding_idx': 0, 'oov_idx': 10, 'vocab_size': 11}",
+    "customer": "{'source': 'item', 'type': 'categorical', 'padding_idx': 0, 'oov_idx': 97, 'vocab_size': 98}",
+    "final_gender_code": "{'source': 'user', 'type': 'categorical', 'padding_idx': 0, 'oov_idx': 3, 'vocab_size': 4}",
+    "occupation": "{'source': 'user', 'type': 'categorical', 'padding_idx': 0, 'oov_idx': 3, 'vocab_size': 4}",
+    "pid": "{'source': 'context', 'type': 'categorical', 'padding_idx': 0, 'oov_idx': 3, 'vocab_size': 4}",
+    "pvalue_level": "{'source': 'user', 'type': 'categorical', 'padding_idx': 0, 'oov_idx': 3, 'vocab_size': 4}",
+    "shopping_level": "{'source': 'user', 'type': 'categorical', 'padding_idx': 0, 'oov_idx': 4, 'vocab_size': 5}",
+    "userid": "{'source': 'user', 'type': 'categorical', 'padding_idx': 0, 'oov_idx': 25, 'vocab_size': 26}"
+}
+2023-06-06 16:08:08,974 P74006 INFO Total number of parameters: 23861.
+2023-06-06 16:08:08,974 P74006 INFO Loading data...
+2023-06-06 16:08:08,974 P74006 INFO Loading data from h5: ../../data/tiny_h5/train.h5
+2023-06-06 16:08:09,008 P74006 INFO Train samples: total/100, blocks/1
+2023-06-06 16:08:09,009 P74006 INFO Loading data from h5: ../../data/tiny_h5/valid.h5
+2023-06-06 16:08:09,014 P74006 INFO Validation samples: total/100, blocks/1
+2023-06-06 16:08:09,014 P74006 INFO Loading train and validation data done.
+2023-06-06 16:08:09,014 P74006 INFO Start training: 1 batches/epoch
+2023-06-06 16:08:09,014 P74006 INFO ************ Epoch=1 start ************
+2023-06-06 16:08:09,255 P74006 INFO Train loss: 0.693096
+2023-06-06 16:08:09,255 P74006 INFO Evaluation @epoch 1 - batch 1: 
+2023-06-06 16:08:09,292 P74006 INFO [Metrics] AUC: 0.940104
+2023-06-06 16:08:09,292 P74006 INFO Save best model: monitor(max)=0.940104
+2023-06-06 16:08:09,301 P74006 INFO ************ Epoch=1 end ************
+2023-06-06 16:08:09,301 P74006 INFO Training finished.
+2023-06-06 16:08:09,301 P74006 INFO Load best model: /Users/conan/Desktop/codes/FuxiCTR/model_zoo/DeepCrossing/checkpoints/tiny_h5/DeepCrossing_test.model
+2023-06-06 16:08:09,306 P74006 INFO ****** Validation evaluation ******
+2023-06-06 16:08:09,334 P74006 INFO [Metrics] logloss: 0.675109 - AUC: 0.940104
+2023-06-06 16:08:09,371 P74006 INFO ******** Test evaluation ********
+2023-06-06 16:08:09,372 P74006 INFO Loading data...
+2023-06-06 16:08:09,372 P74006 INFO Loading data from h5: ../../data/tiny_h5/test.h5
+2023-06-06 16:08:09,380 P74006 INFO Test samples: total/100, blocks/1
+2023-06-06 16:08:09,380 P74006 INFO Loading test data done.
+2023-06-06 16:08:09,405 P74006 INFO [Metrics] logloss: 0.675109 - AUC: 0.940104
