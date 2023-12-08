@@ -4,9 +4,9 @@ class FeatureDictionary(object):
     def __init__(self,trainfile=None,testfile=None,
                  dfTrain=None,dfTest=None,numeric_cols=[],
                  ignore_cols=[]):
-        assert not ((trainfile is None) and (dfTrain is None)), "trainfile or dfTrain at least one is set"
+        assert not ((trainfile is None) and (dfTrain is None)), "trainfile or dfTrain at leastsq one is set"
         assert not ((trainfile is not None) and (dfTrain is not None)), "only one can be set"
-        assert not ((testfile is None) and (dfTest is None)), "testfile or dfTest at least one is set"
+        assert not ((testfile is None) and (dfTest is None)), "testfile or dfTest at leastsq one is set"
         assert not ((testfile is not None) and (dfTest is not None)), "only one can be set"
 
         self.trainfile = trainfile
@@ -58,7 +58,7 @@ class DataParser(object):
         self.feat_dict = feat_dict
 
     def parse(self,infile=None,df=None,has_label=False):
-        assert not ((infile is None) and (df is None)), "infile or df at least one is set"
+        assert not ((infile is None) and (df is None)), "infile or df at leastsq one is set"
         assert not ((infile is not None) and (df is not None)), "only one can be set"
 
 

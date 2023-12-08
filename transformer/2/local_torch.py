@@ -46,11 +46,13 @@ from torch.nn import functional as F
 from torch.utils import data
 from torchvision import transforms
 
+
 def use_svg_display():
     """Use the svg format to display a plot in Jupyter.
 
     Defined in :numref:`sec_calculus`"""
     backend_inline.set_matplotlib_formats('svg')
+
 
 def set_figsize(figsize=(3.5, 2.5)):
     """Set the figure size for matplotlib.
@@ -58,6 +60,7 @@ def set_figsize(figsize=(3.5, 2.5)):
     Defined in :numref:`sec_calculus`"""
     use_svg_display()
     d2l.plt.rcParams['figure.figsize'] = figsize
+
 
 def set_axes(axes, xlabel, ylabel, xlim, ylim, xscale, yscale, legend):
     """Set the axes for matplotlib.
@@ -72,6 +75,7 @@ def set_axes(axes, xlabel, ylabel, xlim, ylim, xscale, yscale, legend):
     if legend:
         axes.legend(legend)
     axes.grid()
+
 
 def plot(X, Y=None, xlabel=None, ylabel=None, legend=None, xlim=None,
          ylim=None, xscale='linear', yscale='linear',
@@ -106,8 +110,10 @@ def plot(X, Y=None, xlabel=None, ylabel=None, legend=None, xlim=None,
             axes.plot(y, fmt)
     set_axes(axes, xlabel, ylabel, xlim, ylim, xscale, yscale, legend)
 
+
 class Timer:
     """Record multiple running times."""
+
     def __init__(self):
         """Defined in :numref:`subsec_linear_model`"""
         self.times = []
@@ -134,6 +140,7 @@ class Timer:
         """Return the accumulated time."""
         return np.array(self.times).cumsum().tolist()
 
+
 def synthetic_data(w, b, num_examples):
     """Generate y = Xw + b + noise.
 
@@ -143,17 +150,20 @@ def synthetic_data(w, b, num_examples):
     y += d2l.normal(0, 0.01, y.shape)
     return X, d2l.reshape(y, (-1, 1))
 
+
 def linreg(X, w, b):
     """The linear regression model.
 
     Defined in :numref:`sec_linear_scratch`"""
     return d2l.matmul(X, w) + b
 
+
 def squared_loss(y_hat, y):
     """Squared loss.
 
     Defined in :numref:`sec_linear_scratch`"""
     return (y_hat - d2l.reshape(y, y_hat.shape)) ** 2 / 2
+
 
 def sgd(params, lr, batch_size):
     """Minibatch stochastic gradient descent.
@@ -164,12 +174,14 @@ def sgd(params, lr, batch_size):
             param -= lr * param.grad / batch_size
             param.grad.zero_()
 
+
 def load_array(data_arrays, batch_size, is_train=True):
     """Construct a PyTorch data iterator.
 
     Defined in :numref:`sec_linear_concise`"""
     dataset = data.TensorDataset(*data_arrays)
     return data.DataLoader(dataset, batch_size, shuffle=is_train)
+
 
 def get_fashion_mnist_labels(labels):
     """Return text labels for the Fashion-MNIST dataset.
@@ -178,6 +190,7 @@ def get_fashion_mnist_labels(labels):
     text_labels = ['t-shirt', 'trouser', 'pullover', 'dress', 'coat',
                    'sandal', 'shirt', 'sneaker', 'bag', 'ankle boot']
     return [text_labels[int(i)] for i in labels]
+
 
 def show_images(imgs, num_rows, num_cols, titles=None, scale=1.5):
     """Plot a list of images.
@@ -199,11 +212,13 @@ def show_images(imgs, num_rows, num_cols, titles=None, scale=1.5):
             ax.set_title(titles[i])
     return axes
 
+
 def get_dataloader_workers():
     """Use 4 processes to read the data.
 
     Defined in :numref:`sec_fashion_mnist`"""
     return 4
+
 
 def load_data_fashion_mnist(batch_size, resize=None):
     """Download the Fashion-MNIST dataset and then load it into memory.
@@ -222,6 +237,7 @@ def load_data_fashion_mnist(batch_size, resize=None):
             data.DataLoader(mnist_test, batch_size, shuffle=False,
                             num_workers=get_dataloader_workers()))
 
+
 def accuracy(y_hat, y):
     """Compute the number of correct predictions.
 
@@ -230,6 +246,7 @@ def accuracy(y_hat, y):
         y_hat = d2l.argmax(y_hat, axis=1)
     cmp = d2l.astype(y_hat, y.dtype) == y
     return float(d2l.reduce_sum(d2l.astype(cmp, y.dtype)))
+
 
 def evaluate_accuracy(net, data_iter):
     """Compute the accuracy for a model on a dataset.
@@ -244,8 +261,10 @@ def evaluate_accuracy(net, data_iter):
             metric.add(accuracy(net(X), y), d2l.size(y))
     return metric[0] / metric[1]
 
+
 class Accumulator:
     """For accumulating sums over `n` variables."""
+
     def __init__(self, n):
         """Defined in :numref:`sec_softmax_scratch`"""
         self.data = [0.0] * n
@@ -258,6 +277,7 @@ class Accumulator:
 
     def __getitem__(self, idx):
         return self.data[idx]
+
 
 def train_epoch_ch3(net, train_iter, loss, updater):
     """The training loop defined in Chapter 3.
@@ -285,8 +305,10 @@ def train_epoch_ch3(net, train_iter, loss, updater):
     # Return training loss and training accuracy
     return metric[0] / metric[2], metric[1] / metric[2]
 
+
 class Animator:
     """For plotting data in animation."""
+
     def __init__(self, xlabel=None, ylabel=None, legend=None, xlim=None,
                  ylim=None, xscale='linear', yscale='linear',
                  fmts=('-', 'm--', 'g-.', 'r:'), nrows=1, ncols=1,
@@ -326,6 +348,7 @@ class Animator:
         display.display(self.fig)
         display.clear_output(wait=True)
 
+
 def train_ch3(net, train_iter, test_iter, loss, num_epochs, updater):
     """Train a model (defined in Chapter 3).
 
@@ -341,6 +364,7 @@ def train_ch3(net, train_iter, test_iter, loss, num_epochs, updater):
     assert train_acc <= 1 and train_acc > 0.7, train_acc
     assert test_acc <= 1 and test_acc > 0.7, test_acc
 
+
 def predict_ch3(net, test_iter, n=6):
     """Predict labels (defined in Chapter 3).
 
@@ -349,9 +373,10 @@ def predict_ch3(net, test_iter, n=6):
         break
     trues = d2l.get_fashion_mnist_labels(y)
     preds = d2l.get_fashion_mnist_labels(d2l.argmax(net(X), axis=1))
-    titles = [true +'\n' + pred for true, pred in zip(trues, preds)]
+    titles = [true + '\n' + pred for true, pred in zip(trues, preds)]
     d2l.show_images(
         d2l.reshape(X[0:n], (n, 28, 28)), 1, n, titles=titles[0:n])
+
 
 def evaluate_loss(net, data_iter, loss):
     """Evaluate the loss of a model on the given dataset.
@@ -365,8 +390,10 @@ def evaluate_loss(net, data_iter, loss):
         metric.add(d2l.reduce_sum(l), d2l.size(l))
     return metric[0] / metric[1]
 
+
 DATA_HUB = dict()
 DATA_URL = 'http://d2l-data.s3-accelerate.amazonaws.com/'
+
 
 def download(name, cache_dir=os.path.join('../..', 'data')):
     """Download a file inserted into DATA_HUB, return the local filename.
@@ -392,6 +419,7 @@ def download(name, cache_dir=os.path.join('../..', 'data')):
         f.write(r.content)
     return fname
 
+
 def download_extract(name, folder=None):
     """Download and extract a zip/tar file.
 
@@ -408,12 +436,14 @@ def download_extract(name, folder=None):
     fp.extractall(base_dir)
     return os.path.join(base_dir, folder) if folder else data_dir
 
+
 def download_all():
     """Download all files in the DATA_HUB.
 
     Defined in :numref:`sec_kaggle_house`"""
     for name in DATA_HUB:
         download(name)
+
 
 DATA_HUB['kaggle_house_train'] = (
     DATA_URL + 'kaggle_house_pred_train.csv',
@@ -423,6 +453,7 @@ DATA_HUB['kaggle_house_test'] = (
     DATA_URL + 'kaggle_house_pred_test.csv',
     'fa19780a7b011d9b009e8bff8e99922a8ee2eb90')
 
+
 def try_gpu(i=0):
     """Return gpu(i) if exists, otherwise return cpu().
 
@@ -431,13 +462,15 @@ def try_gpu(i=0):
         return torch.device(f'cuda:{i}')
     return torch.device('cpu')
 
+
 def try_all_gpus():
     """Return all available GPUs, or [cpu(),] if no GPU exists.
 
     Defined in :numref:`sec_use_gpu`"""
     devices = [torch.device(f'cuda:{i}')
-             for i in range(torch.cuda.device_count())]
+               for i in range(torch.cuda.device_count())]
     return devices if devices else [torch.device('cpu')]
+
 
 def corr2d(X, K):
     """Compute 2D cross-correlation.
@@ -449,6 +482,7 @@ def corr2d(X, K):
         for j in range(Y.shape[1]):
             Y[i, j] = d2l.reduce_sum((X[i: i + h, j: j + w] * K))
     return Y
+
 
 def evaluate_accuracy_gpu(net, data_iter, device=None):
     """Compute the accuracy for a model on a dataset using a GPU.
@@ -472,13 +506,16 @@ def evaluate_accuracy_gpu(net, data_iter, device=None):
             metric.add(d2l.accuracy(net(X), y), d2l.size(y))
     return metric[0] / metric[1]
 
+
 def train_ch6(net, train_iter, test_iter, num_epochs, lr, device):
     """Train a model with a GPU (defined in Chapter 6).
 
     Defined in :numref:`sec_lenet`"""
+
     def init_weights(m):
         if type(m) == nn.Linear or type(m) == nn.Conv2d:
             nn.init.xavier_uniform_(m.weight)
+
     net.apply(init_weights)
     print('training on', device)
     net.to(device)
@@ -514,8 +551,10 @@ def train_ch6(net, train_iter, test_iter, num_epochs, lr, device):
     print(f'{metric[2] * num_epochs / timer.sum():.1f} examples/sec '
           f'on {str(device)}')
 
+
 class Residual(nn.Module):
     """The Residual block of ResNet."""
+
     def __init__(self, input_channels, num_channels,
                  use_1x1conv=False, strides=1):
         super().__init__()
@@ -539,8 +578,10 @@ class Residual(nn.Module):
         Y += X
         return F.relu(Y)
 
+
 d2l.DATA_HUB['time_machine'] = (d2l.DATA_URL + 'timemachine.txt',
                                 '090b5e7e70c295757f55df93cb0a180b9691891a')
+
 
 def read_time_machine():
     """Load the time machine dataset into a list of text lines.
@@ -549,6 +590,7 @@ def read_time_machine():
     with open(d2l.download('time_machine'), 'r') as f:
         lines = f.readlines()
     return [re.sub('[^A-Za-z]+', ' ', line).strip().lower() for line in lines]
+
 
 def tokenize(lines, token='word'):
     """Split text lines into word or character tokens.
@@ -561,8 +603,10 @@ def tokenize(lines, token='word'):
     else:
         print('ERROR: unknown token type: ' + token)
 
+
 class Vocab:
     """Vocabulary for text."""
+
     def __init__(self, tokens=None, min_freq=0, reserved_tokens=None):
         """Defined in :numref:`sec_text_preprocessing`"""
         if tokens is None:
@@ -605,6 +649,7 @@ class Vocab:
     def token_freqs(self):  # Index for the unknown token
         return self._token_freqs
 
+
 def count_corpus(tokens):
     """Count token frequencies.
 
@@ -614,6 +659,7 @@ def count_corpus(tokens):
         # Flatten a list of token lists into a list of tokens
         tokens = [token for line in tokens for token in line]
     return collections.Counter(tokens)
+
 
 def load_corpus_time_machine(max_tokens=-1):
     """Return token indices and the vocabulary of the time machine dataset.
@@ -628,6 +674,7 @@ def load_corpus_time_machine(max_tokens=-1):
     if max_tokens > 0:
         corpus = corpus[:max_tokens]
     return corpus, vocab
+
 
 def seq_data_iter_random(corpus, batch_size, num_steps):
     """Generate a minibatch of subsequences using random sampling.
@@ -658,6 +705,7 @@ def seq_data_iter_random(corpus, batch_size, num_steps):
         Y = [data(j + 1) for j in initial_indices_per_batch]
         yield d2l.tensor(X), d2l.tensor(Y)
 
+
 def seq_data_iter_sequential(corpus, batch_size, num_steps):
     """Generate a minibatch of subsequences using sequential partitioning.
 
@@ -674,8 +722,10 @@ def seq_data_iter_sequential(corpus, batch_size, num_steps):
         Y = Ys[:, i: i + num_steps]
         yield X, Y
 
+
 class SeqDataLoader:
     """An iterator to load sequence data."""
+
     def __init__(self, batch_size, num_steps, use_random_iter, max_tokens):
         """Defined in :numref:`sec_language_model`"""
         if use_random_iter:
@@ -688,6 +738,7 @@ class SeqDataLoader:
     def __iter__(self):
         return self.data_iter_fn(self.corpus, self.batch_size, self.num_steps)
 
+
 def load_data_time_machine(batch_size, num_steps,
                            use_random_iter=False, max_tokens=10000):
     """Return the iterator and the vocabulary of the time machine dataset.
@@ -697,8 +748,10 @@ def load_data_time_machine(batch_size, num_steps,
         batch_size, num_steps, use_random_iter, max_tokens)
     return data_iter, data_iter.vocab
 
+
 class RNNModelScratch:
     """A RNN Model implemented from scratch."""
+
     def __init__(self, vocab_size, num_hiddens, device,
                  get_params, init_state, forward_fn):
         """Defined in :numref:`sec_rnn_scratch`"""
@@ -712,6 +765,7 @@ class RNNModelScratch:
 
     def begin_state(self, batch_size, device):
         return self.init_state(batch_size, self.num_hiddens, device)
+
 
 def predict_ch8(prefix, num_preds, net, vocab, device):
     """Generate new characters following the `prefix`.
@@ -729,6 +783,7 @@ def predict_ch8(prefix, num_preds, net, vocab, device):
         outputs.append(int(y.argmax(dim=1).reshape(1)))
     return ''.join([vocab.idx_to_token[i] for i in outputs])
 
+
 def grad_clipping(net, theta):
     """Clip the gradient.
 
@@ -741,6 +796,7 @@ def grad_clipping(net, theta):
     if norm > theta:
         for param in params:
             param.grad[:] *= theta / norm
+
 
 def train_epoch_ch8(net, train_iter, loss, updater, device, use_random_iter):
     """Train a net within one epoch (defined in Chapter 8).
@@ -779,6 +835,7 @@ def train_epoch_ch8(net, train_iter, loss, updater, device, use_random_iter):
         metric.add(l * d2l.size(y), d2l.size(y))
     return math.exp(metric[0] / metric[1]), metric[1] / timer.stop()
 
+
 def train_ch8(net, train_iter, vocab, lr, num_epochs, device,
               use_random_iter=False):
     """Train a model (defined in Chapter 8).
@@ -804,10 +861,12 @@ def train_ch8(net, train_iter, vocab, lr, num_epochs, device,
     print(predict('time traveller'))
     print(predict('traveller'))
 
+
 class RNNModel(nn.Module):
     """The RNN model.
 
     Defined in :numref:`sec_rnn-concise`"""
+
     def __init__(self, rnn_layer, vocab_size, **kwargs):
         super(RNNModel, self).__init__(**kwargs)
         self.rnn = rnn_layer
@@ -835,9 +894,9 @@ class RNNModel(nn.Module):
     def begin_state(self, device, batch_size=1):
         if not isinstance(self.rnn, nn.LSTM):
             # `nn.GRU` takes a tensor as hidden state
-            return  torch.zeros((self.num_directions * self.rnn.num_layers,
-                                 batch_size, self.num_hiddens),
-                                device=device)
+            return torch.zeros((self.num_directions * self.rnn.num_layers,
+                                batch_size, self.num_hiddens),
+                               device=device)
         else:
             # `nn.LSTM` takes a tuple of hidden states
             return (torch.zeros((
@@ -847,8 +906,10 @@ class RNNModel(nn.Module):
                         self.num_directions * self.rnn.num_layers,
                         batch_size, self.num_hiddens), device=device))
 
+
 d2l.DATA_HUB['fra-eng'] = (d2l.DATA_URL + 'fra-eng.zip',
                            '94646ad1522d915e7b0f9296181140edcf86a4f5')
+
 
 def read_data_nmt():
     """Load the English-French dataset.
@@ -858,10 +919,12 @@ def read_data_nmt():
     with open(os.path.join(data_dir, 'fra.txt'), 'r') as f:
         return f.read()
 
+
 def preprocess_nmt(text):
     """Preprocess the English-French dataset.
 
     Defined in :numref:`sec_machine_translation`"""
+
     def no_space(char, prev_char):
         return char in set(',.!?') and prev_char != ' '
 
@@ -872,6 +935,7 @@ def preprocess_nmt(text):
     out = [' ' + char if i > 0 and no_space(char, text[i - 1]) else char
            for i, char in enumerate(text)]
     return ''.join(out)
+
 
 def tokenize_nmt(text, num_examples=None):
     """Tokenize the English-French dataset.
@@ -887,6 +951,7 @@ def tokenize_nmt(text, num_examples=None):
             target.append(parts[1].split(' '))
     return source, target
 
+
 def show_list_len_pair_hist(legend, xlabel, ylabel, xlist, ylist):
     """Plot the histogram for list length pairs.
 
@@ -900,6 +965,7 @@ def show_list_len_pair_hist(legend, xlabel, ylabel, xlist, ylist):
         patch.set_hatch('/')
     d2l.plt.legend(legend)
 
+
 def truncate_pad(line, num_steps, padding_token):
     """Truncate or pad sequences.
 
@@ -907,6 +973,7 @@ def truncate_pad(line, num_steps, padding_token):
     if len(line) > num_steps:
         return line[:num_steps]  # Truncate
     return line + [padding_token] * (num_steps - len(line))  # Pad
+
 
 def build_array_nmt(lines, vocab, num_steps):
     """Transform text sequences of machine translation into minibatches.
@@ -919,6 +986,7 @@ def build_array_nmt(lines, vocab, num_steps):
     valid_len = d2l.reduce_sum(
         d2l.astype(array != vocab['<pad>'], d2l.int32), 1)
     return array, valid_len
+
 
 def load_data_nmt(batch_size, num_steps, num_examples=600):
     """Return the iterator and the vocabularies of the translation dataset.
@@ -936,18 +1004,22 @@ def load_data_nmt(batch_size, num_steps, num_examples=600):
     data_iter = d2l.load_array(data_arrays, batch_size)
     return data_iter, src_vocab, tgt_vocab
 
+
 class Encoder(nn.Module):
     """The base encoder interface for the encoder-decoder architecture."""
+
     def __init__(self, **kwargs):
         super(Encoder, self).__init__(**kwargs)
 
     def forward(self, X, *args):
         raise NotImplementedError
 
+
 class Decoder(nn.Module):
     """The base decoder interface for the encoder-decoder architecture.
 
     Defined in :numref:`sec_encoder-decoder`"""
+
     def __init__(self, **kwargs):
         super(Decoder, self).__init__(**kwargs)
 
@@ -957,16 +1029,23 @@ class Decoder(nn.Module):
     def forward(self, X, state):
         raise NotImplementedError
 
+
 class EncoderDecoder(nn.Module):
     """The base class for the encoder-decoder architecture.
 
     Defined in :numref:`sec_encoder-decoder`"""
+
     def __init__(self, encoder, decoder, **kwargs):
         super(EncoderDecoder, self).__init__(**kwargs)
         self.encoder = encoder
         self.decoder = decoder
 
     def forward(self, enc_X, dec_X, *args):
+        """
+        input\output作为输入
+        :param enc_X: encoder的输入
+        :param dec_X: decoder的输入
+        """
         # [B, seq_len, embed_size]——[64, 10, 32]
         enc_outputs = self.encoder(enc_X, *args)
 
@@ -974,10 +1053,12 @@ class EncoderDecoder(nn.Module):
         dec_state = self.decoder.init_state(enc_outputs, *args)
         return self.decoder(dec_X, dec_state)
 
+
 class Seq2SeqEncoder(d2l.Encoder):
     """The RNN encoder for sequence to sequence learning.
 
     Defined in :numref:`sec_seq2seq`"""
+
     def __init__(self, vocab_size, embed_size, num_hiddens, num_layers,
                  dropout=0, **kwargs):
         super(Seq2SeqEncoder, self).__init__(**kwargs)
@@ -997,36 +1078,40 @@ class Seq2SeqEncoder(d2l.Encoder):
         # `state` shape: (`num_layers`, `batch_size`, `num_hiddens`)
         return output, state
 
+
 def sequence_mask(X, valid_len, value=0):
     """Mask irrelevant entries in sequences.
 
     Defined in :numref:`sec_seq2seq_decoder`"""
     maxlen = X.size(1)
-    mask = torch.arange((maxlen), dtype=torch.float32,
-                        device=X.device)[None, :] < valid_len[:, None]
+    mask = torch.arange((maxlen), dtype=torch.float32, device=X.device)[None, :] < valid_len[:, None]
     X[~mask] = value
     return X
+
 
 class MaskedSoftmaxCELoss(nn.CrossEntropyLoss):
     """The softmax cross-entropy loss with masks.
 
     Defined in :numref:`sec_seq2seq_decoder`"""
+
     # `pred` shape: (`batch_size`, `num_steps`, `vocab_size`)
     # `label` shape: (`batch_size`, `num_steps`)
     # `valid_len` shape: (`batch_size`,)
     def forward(self, pred, label, valid_len):
         weights = torch.ones_like(label)
         weights = sequence_mask(weights, valid_len)
-        self.reduction='none'
+        self.reduction = 'none'
         unweighted_loss = super(MaskedSoftmaxCELoss, self).forward(
             pred.permute(0, 2, 1), label)
         weighted_loss = (unweighted_loss * weights).mean(dim=1)
         return weighted_loss
 
+
 def train_seq2seq(net, data_iter, lr, num_epochs, tgt_vocab, device):
     """Train a model for sequence to sequence.
 
     Defined in :numref:`sec_seq2seq_decoder`"""
+
     def xavier_init_weights(m):
         if type(m) == nn.Linear:
             nn.init.xavier_uniform_(m.weight)
@@ -1034,6 +1119,7 @@ def train_seq2seq(net, data_iter, lr, num_epochs, tgt_vocab, device):
             for param in m._flat_weights_names:
                 if "weight" in param:
                     nn.init.xavier_uniform_(m._parameters[param])
+
     net.apply(xavier_init_weights)
     net.to(device)
     optimizer = torch.optim.Adam(net.parameters(), lr=lr)
@@ -1051,6 +1137,8 @@ def train_seq2seq(net, data_iter, lr, num_epochs, tgt_vocab, device):
             X, X_valid_len, Y, Y_valid_len = [x.to(device) for x in batch]
             bos = torch.tensor([tgt_vocab['<bos>']] * Y.shape[0],
                                device=device).reshape(-1, 1)
+
+            # target Y的除最有一个word，都作为target输入到网络里
             dec_input = d2l.concat([bos, Y[:, :-1]], 1)  # Teacher forcing
             Y_hat, _ = net(X, dec_input, X_valid_len)
             l = loss(Y_hat, Y, Y_valid_len)
@@ -1060,16 +1148,22 @@ def train_seq2seq(net, data_iter, lr, num_epochs, tgt_vocab, device):
             optimizer.step()
             with torch.no_grad():
                 metric.add(l.sum(), num_tokens)
+
         if (epoch + 1) % 10 == 0:
             animator.add(epoch + 1, (metric[0] / metric[1],))
+
     print(f'loss {metric[0] / metric[1]:.3f}, {metric[1] / timer.stop():.1f} '
           f'tokens/sec on {str(device)}')
+
 
 def predict_seq2seq(net, src_sentence, src_vocab, tgt_vocab, num_steps,
                     device, save_attention_weights=False):
     """Predict for sequence to sequence.
 
-    Defined in :numref:`sec_seq2seq_training`"""
+    Defined in :numref:`sec_seq2seq_training`
+    :param num_steps: 生成的步数。每一步，生成一个token（字）。
+
+    """
     # Set `net` to eval mode for inference
     net.eval()
     src_tokens = src_vocab[src_sentence.lower().split(' ')] + [
@@ -1087,19 +1181,23 @@ def predict_seq2seq(net, src_sentence, src_vocab, tgt_vocab, num_steps,
     output_seq, attention_weight_seq = [], []
     for _ in range(num_steps):
         Y, dec_state = net.decoder(dec_X, dec_state)
+
         # We use the token with the highest prediction likelihood as the input
         # of the decoder at the next time step
         dec_X = Y.argmax(dim=2)
         pred = dec_X.squeeze(dim=0).type(torch.int32).item()
+
         # Save attention weights (to be covered later)
         if save_attention_weights:
             attention_weight_seq.append(net.decoder.attention_weights)
-        # Once the end-of-sequence token is predicted, the generation of the
-        # output sequence is complete
+
+        # Once the end-of-sequence token is predicted, the generation of the output sequence is complete
         if pred == tgt_vocab['<eos>']:
             break
         output_seq.append(pred)
+
     return ' '.join(tgt_vocab.to_tokens(output_seq)), attention_weight_seq
+
 
 def bleu(pred_seq, label_seq, k):
     """Compute the BLEU.
@@ -1118,6 +1216,7 @@ def bleu(pred_seq, label_seq, k):
                 label_subs[' '.join(pred_tokens[i: i + n])] -= 1
         score *= math.pow(num_matches / (len_pred - n + 1), math.pow(0.5, n))
     return score
+
 
 def show_heatmaps(matrices, xlabel, ylabel, titles=None, figsize=(2.5, 2.5),
                   cmap='Reds'):
@@ -1139,12 +1238,14 @@ def show_heatmaps(matrices, xlabel, ylabel, titles=None, figsize=(2.5, 2.5),
                 ax.set_title(titles[j])
     fig.colorbar(pcm, ax=axes, shrink=0.6);
 
+
 def masked_softmax(X, valid_lens):
     """Perform softmax operation by masking elements on the last axis.
 
     Defined in :numref:`sec_attention-scoring-functions`"""
     # `X`: 3D tensor, `valid_lens`: 1D or 2D tensor
     if valid_lens is None:
+        # 这时候是普通的softmax
         return nn.functional.softmax(X, dim=-1)
     else:
         shape = X.shape
@@ -1158,10 +1259,12 @@ def masked_softmax(X, valid_lens):
                               value=-1e6)
         return nn.functional.softmax(X.reshape(shape), dim=-1)
 
+
 class AdditiveAttention(nn.Module):
     """Additive attention.
 
     Defined in :numref:`sec_attention-scoring-functions`"""
+
     def __init__(self, key_size, query_size, num_hiddens, dropout, **kwargs):
         super(AdditiveAttention, self).__init__(**kwargs)
         self.W_k = nn.Linear(key_size, num_hiddens, bias=False)
@@ -1186,10 +1289,12 @@ class AdditiveAttention(nn.Module):
         # dimension)
         return torch.bmm(self.dropout(self.attention_weights), values)
 
+
 class DotProductAttention(nn.Module):
     """Scaled dot product attention.
 
     Defined in :numref:`subsec_additive-attention`"""
+
     def __init__(self, dropout, **kwargs):
         super(DotProductAttention, self).__init__(**kwargs)
         self.dropout = nn.Dropout(dropout)
@@ -1198,18 +1303,22 @@ class DotProductAttention(nn.Module):
     # Shape of `keys`: (`batch_size`, no. of key-value pairs, `d`)
     # Shape of `values`: (`batch_size`, no. of key-value pairs, value
     # dimension)
-    # Shape of `valid_lens`: (`batch_size`,) or (`batch_size`, no. of queries)
+    # Shape of `valid_lens`: (`batch_size`,) or (`batch_size`, no. of queries)。有效的长度。用来做mask self attention里的mask
     def forward(self, queries, keys, values, valid_lens=None):
         d = queries.shape[-1]
         # Set `transpose_b=True` to swap the last two dimensions of `keys`
-        scores = torch.bmm(queries, keys.transpose(1,2)) / math.sqrt(d)
+        scores = torch.bmm(queries, keys.transpose(1, 2)) / math.sqrt(d)
         self.attention_weights = masked_softmax(scores, valid_lens)
-        return torch.bmm(self.dropout(self.attention_weights), values)
+        w = self.attention_weights[0, :, :]
+        ret = torch.bmm(self.dropout(self.attention_weights), values)
+        return ret
+
 
 class AttentionDecoder(d2l.Decoder):
     """The base attention-based decoder interface.
 
     Defined in :numref:`sec_seq2seq_attention`"""
+
     def __init__(self, **kwargs):
         super(AttentionDecoder, self).__init__(**kwargs)
 
@@ -1217,10 +1326,12 @@ class AttentionDecoder(d2l.Decoder):
     def attention_weights(self):
         raise NotImplementedError
 
+
 class MultiHeadAttention(nn.Module):
     """Multi-head attention.
 
     Defined in :numref:`sec_multihead-attention`"""
+
     def __init__(self, key_size, query_size, value_size, num_hiddens,
                  num_heads, dropout, bias=False, **kwargs):
         super(MultiHeadAttention, self).__init__(**kwargs)
@@ -1249,14 +1360,14 @@ class MultiHeadAttention(nn.Module):
             valid_lens = torch.repeat_interleave(
                 valid_lens, repeats=self.num_heads, dim=0)
 
-        # Shape of `output`: (`batch_size` * `num_heads`, no. of queries,
-        # `num_hiddens` / `num_heads`)
+        # Shape of `output`: (`batch_size` * `num_heads`, no. of queries, `num_hiddens` / `num_heads`)
         output = self.attention(queries, keys, values, valid_lens)
-
+        first_seq = output[0, :,:]
         # Shape of `output_concat`:
         # (`batch_size`, no. of queries, `num_hiddens`)
         output_concat = transpose_output(output, self.num_heads)
         return self.W_o(output_concat)
+
 
 def transpose_qkv(X, num_heads):
     """Transposition for parallel computation of multiple attention heads.
@@ -1288,10 +1399,12 @@ def transpose_output(X, num_heads):
     X = X.permute(0, 2, 1, 3)
     return X.reshape(X.shape[0], X.shape[1], -1)
 
+
 class PositionalEncoding(nn.Module):
     """Positional encoding.
 
     Defined in :numref:`sec_self-attention-and-positional-encoding`"""
+
     def __init__(self, num_hiddens, dropout, max_len=1000):
         super(PositionalEncoding, self).__init__()
         self.dropout = nn.Dropout(dropout)
@@ -1307,10 +1420,12 @@ class PositionalEncoding(nn.Module):
         X = X + self.P[:, :X.shape[1], :].to(X.device)
         return self.dropout(X)
 
+
 class PositionWiseFFN(nn.Module):
     """Positionwise feed-forward network.
 
     Defined in :numref:`sec_transformer`"""
+
     def __init__(self, ffn_num_input, ffn_num_hiddens, ffn_num_outputs,
                  **kwargs):
         super(PositionWiseFFN, self).__init__(**kwargs)
@@ -1321,10 +1436,12 @@ class PositionWiseFFN(nn.Module):
     def forward(self, X):
         return self.dense2(self.relu(self.dense1(X)))
 
+
 class AddNorm(nn.Module):
     """Residual connection followed by layer normalization.
 
     Defined in :numref:`sec_transformer`"""
+
     def __init__(self, normalized_shape, dropout, **kwargs):
         super(AddNorm, self).__init__(**kwargs)
         self.dropout = nn.Dropout(dropout)
@@ -1333,10 +1450,12 @@ class AddNorm(nn.Module):
     def forward(self, X, Y):
         return self.ln(self.dropout(Y) + X)
 
+
 class EncoderBlock(nn.Module):
     """Transformer encoder block.
 
     Defined in :numref:`sec_transformer`"""
+
     def __init__(self, key_size, query_size, value_size, num_hiddens,
                  norm_shape, ffn_num_input, ffn_num_hiddens, num_heads,
                  dropout, use_bias=False, **kwargs):
@@ -1353,10 +1472,12 @@ class EncoderBlock(nn.Module):
         Y = self.addnorm1(X, self.attention(X, X, X, valid_lens))
         return self.addnorm2(Y, self.ffn(Y))
 
+
 class TransformerEncoder(d2l.Encoder):
     """Transformer encoder.
 
     Defined in :numref:`sec_transformer`"""
+
     def __init__(self, vocab_size, key_size, query_size, value_size,
                  num_hiddens, norm_shape, ffn_num_input, ffn_num_hiddens,
                  num_heads, num_layers, dropout, use_bias=False, **kwargs):
@@ -1366,10 +1487,10 @@ class TransformerEncoder(d2l.Encoder):
         self.pos_encoding = d2l.PositionalEncoding(num_hiddens, dropout)
         self.blks = nn.Sequential()
         for i in range(num_layers):
-            self.blks.add_module("block"+str(i),
-                EncoderBlock(key_size, query_size, value_size, num_hiddens,
-                             norm_shape, ffn_num_input, ffn_num_hiddens,
-                             num_heads, dropout, use_bias))
+            self.blks.add_module("block" + str(i),
+                                 EncoderBlock(key_size, query_size, value_size, num_hiddens,
+                                              norm_shape, ffn_num_input, ffn_num_hiddens,
+                                              num_heads, dropout, use_bias))
 
     def forward(self, X, valid_lens, *args):
         # Since positional encoding values are between -1 and 1, the embedding
@@ -1383,9 +1504,11 @@ class TransformerEncoder(d2l.Encoder):
                 i] = blk.attention.attention.attention_weights
         return X
 
+
 def annotate(text, xy, xytext):
     d2l.plt.gca().annotate(text, xy=xy, xytext=xytext,
                            arrowprops=dict(arrowstyle='->'))
+
 
 def train_2d(trainer, steps=20, f_grad=None):
     """Optimize a 2D objective function with a customized trainer.
@@ -1403,6 +1526,7 @@ def train_2d(trainer, steps=20, f_grad=None):
     print(f'epoch {i + 1}, x1: {float(x1):f}, x2: {float(x2):f}')
     return results
 
+
 def show_trace_2d(f, results):
     """Show the trace of 2D variables during optimization.
 
@@ -1415,8 +1539,10 @@ def show_trace_2d(f, results):
     d2l.plt.xlabel('x1')
     d2l.plt.ylabel('x2')
 
+
 d2l.DATA_HUB['airfoil'] = (d2l.DATA_URL + 'airfoil_self_noise.dat',
                            '76e5be1548fd8222e5074cf0faae75edff8cf93f')
+
 
 def get_data_ch11(batch_size=10, n=1500):
     """Defined in :numref:`sec_minibatches`"""
@@ -1425,7 +1551,8 @@ def get_data_ch11(batch_size=10, n=1500):
     data = torch.from_numpy((data - data.mean(axis=0)) / data.std(axis=0))
     data_iter = d2l.load_array((data[:n, :-1], data[:n, -1]),
                                batch_size, is_train=True)
-    return data_iter, data.shape[1]-1
+    return data_iter, data.shape[1] - 1
+
 
 def train_ch11(trainer_fn, states, hyperparams, data_iter,
                feature_dim, num_epochs=2):
@@ -1447,19 +1574,22 @@ def train_ch11(trainer_fn, states, hyperparams, data_iter,
             n += X.shape[0]
             if n % 200 == 0:
                 timer.stop()
-                animator.add(n/X.shape[0]/len(data_iter),
+                animator.add(n / X.shape[0] / len(data_iter),
                              (d2l.evaluate_loss(net, data_iter, loss),))
                 timer.start()
     print(f'loss: {animator.Y[0][-1]:.3f}, {timer.avg():.3f} sec/epoch')
     return timer.cumsum(), animator.Y[0]
 
+
 def train_concise_ch11(trainer_fn, hyperparams, data_iter, num_epochs=4):
     """Defined in :numref:`sec_minibatches`"""
     # Initialization
     net = nn.Sequential(nn.Linear(5, 1))
+
     def init_weights(m):
         if type(m) == nn.Linear:
             torch.nn.init.normal_(m.weight, std=0.01)
+
     net.apply(init_weights)
 
     optimizer = trainer_fn(net.parameters(), **hyperparams)
@@ -1479,13 +1609,15 @@ def train_concise_ch11(trainer_fn, hyperparams, data_iter, num_epochs=4):
             if n % 200 == 0:
                 timer.stop()
                 # `MSELoss` computes squared error without the 1/2 factor
-                animator.add(n/X.shape[0]/len(data_iter),
+                animator.add(n / X.shape[0] / len(data_iter),
                              (d2l.evaluate_loss(net, data_iter, loss) / 2,))
                 timer.start()
     print(f'loss: {animator.Y[0][-1]:.3f}, {timer.avg():.3f} sec/epoch')
 
+
 class Benchmark:
     """For measuring running time."""
+
     def __init__(self, description='Done'):
         """Defined in :numref:`sec_hybridize`"""
         self.description = description
@@ -1497,6 +1629,7 @@ class Benchmark:
     def __exit__(self, *args):
         print(f'{self.description}: {self.timer.stop():.4f} sec')
 
+
 def split_batch(X, y, devices):
     """Split `X` and `y` into multiple devices.
 
@@ -1505,10 +1638,12 @@ def split_batch(X, y, devices):
     return (nn.parallel.scatter(X, devices),
             nn.parallel.scatter(y, devices))
 
+
 def resnet18(num_classes, in_channels=1):
     """A slightly modified ResNet-18 model.
 
     Defined in :numref:`sec_multi_gpu_concise`"""
+
     def resnet_block(in_channels, out_channels, num_residuals,
                      first_block=False):
         blk = []
@@ -1530,10 +1665,11 @@ def resnet18(num_classes, in_channels=1):
     net.add_module("resnet_block2", resnet_block(64, 128, 2))
     net.add_module("resnet_block3", resnet_block(128, 256, 2))
     net.add_module("resnet_block4", resnet_block(256, 512, 2))
-    net.add_module("global_avg_pool", nn.AdaptiveAvgPool2d((1,1)))
+    net.add_module("global_avg_pool", nn.AdaptiveAvgPool2d((1, 1)))
     net.add_module("fc", nn.Sequential(nn.Flatten(),
                                        nn.Linear(512, num_classes)))
     return net
+
 
 def train_batch_ch13(net, X, y, loss, trainer, devices):
     """Train for a minibatch with mutiple GPUs (defined in Chapter 13).
@@ -1554,6 +1690,7 @@ def train_batch_ch13(net, X, y, loss, trainer, devices):
     train_loss_sum = l.sum()
     train_acc_sum = d2l.accuracy(pred, y)
     return train_loss_sum, train_acc_sum
+
 
 def train_ch13(net, train_iter, test_iter, loss, trainer, num_epochs,
                devices=d2l.try_all_gpus()):
@@ -1585,8 +1722,10 @@ def train_ch13(net, train_iter, test_iter, loss, trainer, num_epochs,
     print(f'{metric[2] * num_epochs / timer.sum():.1f} examples/sec on '
           f'{str(devices)}')
 
+
 d2l.DATA_HUB['hotdog'] = (d2l.DATA_URL + 'hotdog.zip',
-                         'fba480ffa8aa7e0febbb511d181409f899b9baa5')
+                          'fba480ffa8aa7e0febbb511d181409f899b9baa5')
+
 
 def box_corner_to_center(boxes):
     """Convert from (upper-left, lower-right) to (center, width, height).
@@ -1600,6 +1739,7 @@ def box_corner_to_center(boxes):
     boxes = d2l.stack((cx, cy, w, h), axis=-1)
     return boxes
 
+
 def box_center_to_corner(boxes):
     """Convert from (center, width, height) to (upper-left, lower-right).
 
@@ -1612,6 +1752,7 @@ def box_center_to_corner(boxes):
     boxes = d2l.stack((x1, y1, x2, y2), axis=-1)
     return boxes
 
+
 def bbox_to_rect(bbox, color):
     """Convert bounding box to matplotlib format.
 
@@ -1620,8 +1761,9 @@ def bbox_to_rect(bbox, color):
     # lower-right y) format to the matplotlib format: ((upper-left x,
     # upper-left y), width, height)
     return d2l.plt.Rectangle(
-        xy=(bbox[0], bbox[1]), width=bbox[2]-bbox[0], height=bbox[3]-bbox[1],
+        xy=(bbox[0], bbox[1]), width=bbox[2] - bbox[0], height=bbox[3] - bbox[1],
         fill=False, edgecolor=color, linewidth=2)
+
 
 def multibox_prior(data, sizes, ratios):
     """Generate anchor boxes with different shapes centered on each pixel.
@@ -1647,20 +1789,21 @@ def multibox_prior(data, sizes, ratios):
     # Generate `boxes_per_pixel` number of heights and widths that are later
     # used to create anchor box corner coordinates (xmin, xmax, ymin, ymax)
     w = torch.cat((size_tensor * torch.sqrt(ratio_tensor[0]),
-                   sizes[0] * torch.sqrt(ratio_tensor[1:])))\
-                   * in_height / in_width  # Handle rectangular inputs
+                   sizes[0] * torch.sqrt(ratio_tensor[1:]))) \
+        * in_height / in_width  # Handle rectangular inputs
     h = torch.cat((size_tensor / torch.sqrt(ratio_tensor[0]),
                    sizes[0] / torch.sqrt(ratio_tensor[1:])))
     # Divide by 2 to get half height and half width
     anchor_manipulations = torch.stack((-w, -h, w, h)).T.repeat(
-                                        in_height * in_width, 1) / 2
+        in_height * in_width, 1) / 2
 
     # Each center point will have `boxes_per_pixel` number of anchor boxes, so
     # generate a grid of all anchor box centers with `boxes_per_pixel` repeats
     out_grid = torch.stack([shift_x, shift_y, shift_x, shift_y],
-                dim=1).repeat_interleave(boxes_per_pixel, dim=0)
+                           dim=1).repeat_interleave(boxes_per_pixel, dim=0)
     output = out_grid + anchor_manipulations
     return output.unsqueeze(0)
+
 
 def show_bboxes(axes, bboxes, labels=None, colors=None):
     """Show bounding boxes.
@@ -1686,6 +1829,7 @@ def show_bboxes(axes, bboxes, labels=None, colors=None):
                       va='center', ha='center', fontsize=9, color=text_color,
                       bbox=dict(facecolor=color, lw=0))
 
+
 def box_iou(boxes1, boxes2):
     """Compute pairwise IoU across two lists of anchor or bounding boxes.
 
@@ -1705,6 +1849,7 @@ def box_iou(boxes1, boxes2):
     inter_areas = inters[:, :, 0] * inters[:, :, 1]
     union_areas = areas1[:, None] + areas2 - inter_areas
     return inter_areas / union_areas
+
 
 def assign_anchor_to_bbox(ground_truth, anchors, device, iou_threshold=0.5):
     """Assign closest ground-truth bounding boxes to anchor boxes.
@@ -1734,6 +1879,7 @@ def assign_anchor_to_bbox(ground_truth, anchors, device, iou_threshold=0.5):
         jaccard[anc_idx, :] = row_discard
     return anchors_bbox_map
 
+
 def offset_boxes(anchors, assigned_bb, eps=1e-6):
     """Transform for anchor box offsets.
 
@@ -1744,6 +1890,7 @@ def offset_boxes(anchors, assigned_bb, eps=1e-6):
     offset_wh = 5 * d2l.log(eps + c_assigned_bb[:, 2:] / c_anc[:, 2:])
     offset = d2l.concat([offset_xy, offset_wh], axis=1)
     return offset
+
 
 def multibox_target(anchors, labels):
     """Label anchor boxes using ground-truth bounding boxes.
@@ -1781,6 +1928,7 @@ def multibox_target(anchors, labels):
     class_labels = torch.stack(batch_class_labels)
     return (bbox_offset, bbox_mask, class_labels)
 
+
 def offset_inverse(anchors, offset_preds):
     """Predict bounding boxes based on anchor boxes with predicted offsets.
 
@@ -1791,6 +1939,7 @@ def offset_inverse(anchors, offset_preds):
     pred_bbox = d2l.concat((pred_bbox_xy, pred_bbox_wh), axis=1)
     predicted_bbox = d2l.box_center_to_corner(pred_bbox)
     return predicted_bbox
+
 
 def nms(boxes, scores, iou_threshold):
     """Sort confidence scores of predicted bounding boxes.
@@ -1807,6 +1956,7 @@ def nms(boxes, scores, iou_threshold):
         inds = torch.nonzero(iou <= iou_threshold).reshape(-1)
         B = B[inds + 1]
     return d2l.tensor(keep, device=boxes.device)
+
 
 def multibox_detection(cls_probs, offset_preds, anchors, nms_threshold=0.5,
                        pos_threshold=0.009999999):
@@ -1842,9 +1992,11 @@ def multibox_detection(cls_probs, offset_preds, anchors, nms_threshold=0.5,
         out.append(pred_info)
     return d2l.stack(out)
 
+
 d2l.DATA_HUB['banana-detection'] = (
     d2l.DATA_URL + 'banana-detection.zip',
     '5de26c8fce5ccdea9f91267273464dc968d20d72')
+
 
 def read_data_bananas(is_train=True):
     """Read the banana detection dataset images and labels.
@@ -1852,34 +2004,37 @@ def read_data_bananas(is_train=True):
     Defined in :numref:`sec_object-detection-dataset`"""
     data_dir = d2l.download_extract('banana-detection')
     csv_fname = os.path.join(data_dir, 'bananas_train' if is_train
-                             else 'bananas_val', 'label.csv')
+    else 'bananas_val', 'label.csv')
     csv_data = pd.read_csv(csv_fname)
     csv_data = csv_data.set_index('img_name')
     images, targets = [], []
     for img_name, target in csv_data.iterrows():
         images.append(torchvision.io.read_image(
             os.path.join(data_dir, 'bananas_train' if is_train else
-                         'bananas_val', 'images', f'{img_name}')))
+            'bananas_val', 'images', f'{img_name}')))
         # Here `target` contains (class, upper-left x, upper-left y,
         # lower-right x, lower-right y), where all the images have the same
         # banana class (index 0)
         targets.append(list(target))
     return images, torch.tensor(targets).unsqueeze(1) / 256
 
+
 class BananasDataset(torch.utils.data.Dataset):
     """A customized dataset to load the banana detection dataset.
 
     Defined in :numref:`sec_object-detection-dataset`"""
+
     def __init__(self, is_train):
         self.features, self.labels = read_data_bananas(is_train)
         print('read ' + str(len(self.features)) + (f' training examples' if
-              is_train else f' validation examples'))
+                                                   is_train else f' validation examples'))
 
     def __getitem__(self, idx):
         return (self.features[idx].float(), self.labels[idx])
 
     def __len__(self):
         return len(self.features)
+
 
 def load_data_bananas(batch_size):
     """Load the banana detection dataset.
@@ -1891,8 +2046,10 @@ def load_data_bananas(batch_size):
                                            batch_size)
     return train_iter, val_iter
 
+
 d2l.DATA_HUB['voc2012'] = (d2l.DATA_URL + 'VOCtrainval_11-May-2012.tar',
                            '4e443f8a2eca6b1dac8a6c57641b67dd40621a49')
+
 
 def read_voc_images(voc_dir, is_train=True):
     """Read all VOC feature and label images.
@@ -1908,8 +2065,9 @@ def read_voc_images(voc_dir, is_train=True):
         features.append(torchvision.io.read_image(os.path.join(
             voc_dir, 'JPEGImages', f'{fname}.jpg')))
         labels.append(torchvision.io.read_image(os.path.join(
-            voc_dir, 'SegmentationClass' ,f'{fname}.png'), mode))
+            voc_dir, 'SegmentationClass', f'{fname}.png'), mode))
     return features, labels
+
 
 VOC_COLORMAP = [[0, 0, 0], [128, 0, 0], [0, 128, 0], [128, 128, 0],
                 [0, 0, 128], [128, 0, 128], [0, 128, 128], [128, 128, 128],
@@ -1923,6 +2081,7 @@ VOC_CLASSES = ['background', 'aeroplane', 'bicycle', 'bird', 'boat',
                'diningtable', 'dog', 'horse', 'motorbike', 'person',
                'potted plant', 'sheep', 'sofa', 'train', 'tv/monitor']
 
+
 def voc_colormap2label():
     """Build the mapping from RGB to class indices for VOC labels.
 
@@ -1933,6 +2092,7 @@ def voc_colormap2label():
             (colormap[0] * 256 + colormap[1]) * 256 + colormap[2]] = i
     return colormap2label
 
+
 def voc_label_indices(colormap, colormap2label):
     """Map any RGB values in VOC labels to their class indices.
 
@@ -1941,6 +2101,7 @@ def voc_label_indices(colormap, colormap2label):
     idx = ((colormap[:, :, 0] * 256 + colormap[:, :, 1]) * 256
            + colormap[:, :, 2])
     return colormap2label[idx]
+
 
 def voc_rand_crop(feature, label, height, width):
     """Randomly crop both feature and label images.
@@ -1951,6 +2112,7 @@ def voc_rand_crop(feature, label, height, width):
     feature = torchvision.transforms.functional.crop(feature, *rect)
     label = torchvision.transforms.functional.crop(label, *rect)
     return feature, label
+
 
 class VOCSegDataset(torch.utils.data.Dataset):
     """A customized dataset to load the VOC dataset.
@@ -1973,8 +2135,8 @@ class VOCSegDataset(torch.utils.data.Dataset):
 
     def filter(self, imgs):
         return [img for img in imgs if (
-            img.shape[1] >= self.crop_size[0] and
-            img.shape[2] >= self.crop_size[1])]
+                img.shape[1] >= self.crop_size[0] and
+                img.shape[2] >= self.crop_size[1])]
 
     def __getitem__(self, idx):
         feature, label = voc_rand_crop(self.features[idx], self.labels[idx],
@@ -1983,6 +2145,7 @@ class VOCSegDataset(torch.utils.data.Dataset):
 
     def __len__(self):
         return len(self.features)
+
 
 def load_data_voc(batch_size, crop_size):
     """Load the VOC semantic segmentation dataset.
@@ -1999,8 +2162,10 @@ def load_data_voc(batch_size, crop_size):
         drop_last=True, num_workers=num_workers)
     return train_iter, test_iter
 
+
 d2l.DATA_HUB['cifar10_tiny'] = (d2l.DATA_URL + 'kaggle_cifar10_tiny.zip',
                                 '2068874e4b9a9f0fb07ebe0ad2b29754449ccacd')
+
 
 def read_csv_labels(fname):
     """Read `fname` to return a filename to label dictionary.
@@ -2012,12 +2177,14 @@ def read_csv_labels(fname):
     tokens = [l.rstrip().split(',') for l in lines]
     return dict(((name, label) for name, label in tokens))
 
+
 def copyfile(filename, target_dir):
     """Copy a file into a target directory.
 
     Defined in :numref:`sec_kaggle_cifar10`"""
     os.makedirs(target_dir, exist_ok=True)
     shutil.copy(filename, target_dir)
+
 
 def reorg_train_valid(data_dir, labels, valid_ratio):
     """Split the validation set out of the original training set.
@@ -2043,6 +2210,7 @@ def reorg_train_valid(data_dir, labels, valid_ratio):
                                          'train', label))
     return n_valid_per_label
 
+
 def reorg_test(data_dir):
     """Organize the testing set for data loading during prediction.
 
@@ -2052,11 +2220,13 @@ def reorg_test(data_dir):
                  os.path.join(data_dir, 'train_valid_test', 'test',
                               'unknown'))
 
+
 d2l.DATA_HUB['dog_tiny'] = (d2l.DATA_URL + 'kaggle_dog_tiny.zip',
                             '0cb91d09b814ecdc07b50f31f8dcad3e81d6a86d')
 
 d2l.DATA_HUB['ptb'] = (d2l.DATA_URL + 'ptb.zip',
                        '319d85e578af0cdc590547f26231e4e31cdf1e42')
+
 
 def read_ptb():
     """Load the PTB dataset into a list of text lines.
@@ -2067,6 +2237,7 @@ def read_ptb():
     with open(os.path.join(data_dir, 'ptb.train.txt')) as f:
         raw_text = f.read()
     return [line.split() for line in raw_text.split('\n')]
+
 
 def subsample(sentences, vocab):
     """Subsample high-frequency words.
@@ -2080,11 +2251,12 @@ def subsample(sentences, vocab):
 
     # Return True if `token` is kept during subsampling
     def keep(token):
-        return(random.uniform(0, 1) <
-               math.sqrt(1e-4 / counter[token] * num_tokens))
+        return (random.uniform(0, 1) <
+                math.sqrt(1e-4 / counter[token] * num_tokens))
 
     return ([[token for token in line if keep(token)] for line in sentences],
             counter)
+
 
 def get_centers_and_contexts(corpus, max_window_size):
     """Return center words and context words in skip-gram.
@@ -2093,7 +2265,7 @@ def get_centers_and_contexts(corpus, max_window_size):
     centers, contexts = [], []
     for line in corpus:
         # To form a "center word--context word" pair, each sentence needs to
-        # have at least 2 words
+        # have at leastsq 2 words
         if len(line) < 2:
             continue
         centers += line
@@ -2106,8 +2278,10 @@ def get_centers_and_contexts(corpus, max_window_size):
             contexts.append([line[idx] for idx in indices])
     return centers, contexts
 
+
 class RandomGenerator:
     """Randomly draw among {1, ..., n} according to n sampling weights."""
+
     def __init__(self, sampling_weights):
         """Defined in :numref:`sec_word2vec_data`"""
         # Exclude
@@ -2125,13 +2299,14 @@ class RandomGenerator:
         self.i += 1
         return self.candidates[self.i - 1]
 
+
 def get_negatives(all_contexts, vocab, counter, K):
     """Return noise words in negative sampling.
 
     Defined in :numref:`sec_word2vec_data`"""
     # Sampling weights for words with indices 1, 2, ... (index 0 is the
     # excluded unknown token) in the vocabulary
-    sampling_weights = [counter[vocab.to_tokens(i)]**0.75
+    sampling_weights = [counter[vocab.to_tokens(i)] ** 0.75
                         for i in range(1, len(vocab))]
     all_negatives, generator = [], RandomGenerator(sampling_weights)
     for contexts in all_contexts:
@@ -2143,6 +2318,7 @@ def get_negatives(all_contexts, vocab, counter, K):
                 negatives.append(neg)
         all_negatives.append(negatives)
     return all_negatives
+
 
 def batchify(data):
     """Return a minibatch of examples for skip-gram with negative sampling.
@@ -2158,6 +2334,7 @@ def batchify(data):
         labels += [[1] * len(context) + [0] * (max_len - len(context))]
     return (d2l.reshape(d2l.tensor(centers), (-1, 1)), d2l.tensor(
         contexts_negatives), d2l.tensor(masks), d2l.tensor(labels))
+
 
 def load_data_ptb(batch_size, max_window_size, num_noise_words):
     """Download the PTB dataset and then load it into memory.
@@ -2190,9 +2367,10 @@ def load_data_ptb(batch_size, max_window_size, num_noise_words):
     dataset = PTBDataset(all_centers, all_contexts, all_negatives)
 
     data_iter = torch.utils.data.DataLoader(dataset, batch_size, shuffle=True,
-                                      collate_fn=batchify,
-                                      num_workers=num_workers)
+                                            collate_fn=batchify,
+                                            num_workers=num_workers)
     return data_iter, vocab
+
 
 d2l.DATA_HUB['glove.6b.50d'] = (d2l.DATA_URL + 'glove.6B.50d.zip',
                                 '0b8703943ccdb6eb788e6f091b8946e82231bc4d')
@@ -2206,8 +2384,10 @@ d2l.DATA_HUB['glove.42b.300d'] = (d2l.DATA_URL + 'glove.42B.300d.zip',
 d2l.DATA_HUB['wiki.en'] = (d2l.DATA_URL + 'wiki.en.zip',
                            'c1816da3821ae9f43899be655002f6c723e91b88')
 
+
 class TokenEmbedding:
     """Token Embedding."""
+
     def __init__(self, embedding_name):
         """Defined in :numref:`sec_synonyms`"""
         self.idx_to_token, self.idx_to_vec = self._load_embedding(
@@ -2241,6 +2421,7 @@ class TokenEmbedding:
     def __len__(self):
         return len(self.idx_to_token)
 
+
 def get_tokens_and_segments(tokens_a, tokens_b=None):
     """Get tokens of the BERT input sequence and their segment IDs.
 
@@ -2253,10 +2434,12 @@ def get_tokens_and_segments(tokens_a, tokens_b=None):
         segments += [1] * (len(tokens_b) + 1)
     return tokens, segments
 
+
 class BERTEncoder(nn.Module):
     """BERT encoder.
 
     Defined in :numref:`subsec_bert_input_rep`"""
+
     def __init__(self, vocab_size, num_hiddens, norm_shape, ffn_num_input,
                  ffn_num_hiddens, num_heads, num_layers, dropout,
                  max_len=1000, key_size=768, query_size=768, value_size=768,
@@ -2283,10 +2466,12 @@ class BERTEncoder(nn.Module):
             X = blk(X, valid_lens)
         return X
 
+
 class MaskLM(nn.Module):
     """The masked language model task of BERT.
 
     Defined in :numref:`subsec_bert_input_rep`"""
+
     def __init__(self, vocab_size, num_hiddens, num_inputs=768, **kwargs):
         super(MaskLM, self).__init__(**kwargs)
         self.mlp = nn.Sequential(nn.Linear(num_inputs, num_hiddens),
@@ -2307,10 +2492,12 @@ class MaskLM(nn.Module):
         mlm_Y_hat = self.mlp(masked_X)
         return mlm_Y_hat
 
+
 class NextSentencePred(nn.Module):
     """The next sentence prediction task of BERT.
 
     Defined in :numref:`subsec_mlm`"""
+
     def __init__(self, num_inputs, **kwargs):
         super(NextSentencePred, self).__init__(**kwargs)
         self.output = nn.Linear(num_inputs, 2)
@@ -2319,10 +2506,12 @@ class NextSentencePred(nn.Module):
         # `X` shape: (batch size, `num_hiddens`)
         return self.output(X)
 
+
 class BERTModel(nn.Module):
     """The BERT model.
 
     Defined in :numref:`subsec_nsp`"""
+
     def __init__(self, vocab_size, num_hiddens, norm_shape, ffn_num_input,
                  ffn_num_hiddens, num_heads, num_layers, dropout,
                  max_len=1000, key_size=768, query_size=768, value_size=768,
@@ -2330,9 +2519,9 @@ class BERTModel(nn.Module):
                  nsp_in_features=768):
         super(BERTModel, self).__init__()
         self.encoder = BERTEncoder(vocab_size, num_hiddens, norm_shape,
-                    ffn_num_input, ffn_num_hiddens, num_heads, num_layers,
-                    dropout, max_len=max_len, key_size=key_size,
-                    query_size=query_size, value_size=value_size)
+                                   ffn_num_input, ffn_num_hiddens, num_heads, num_layers,
+                                   dropout, max_len=max_len, key_size=key_size,
+                                   query_size=query_size, value_size=value_size)
         self.hidden = nn.Sequential(nn.Linear(hid_in_features, num_hiddens),
                                     nn.Tanh())
         self.mlm = MaskLM(vocab_size, num_hiddens, mlm_in_features)
@@ -2349,9 +2538,11 @@ class BERTModel(nn.Module):
         nsp_Y_hat = self.nsp(self.hidden(encoded_X[:, 0, :]))
         return encoded_X, mlm_Y_hat, nsp_Y_hat
 
+
 d2l.DATA_HUB['wikitext-2'] = (
     'https://s3.amazonaws.com/research.metamind.io/wikitext/'
     'wikitext-2-v1.zip', '3c914d17d80b1459be871a5039ac23e752a53cbe')
+
 
 def _read_wiki(data_dir):
     """Defined in :numref:`sec_bert-dataset`"""
@@ -2364,6 +2555,7 @@ def _read_wiki(data_dir):
     random.shuffle(paragraphs)
     return paragraphs
 
+
 def _get_next_sentence(sentence, next_sentence, paragraphs):
     """Defined in :numref:`sec_bert-dataset`"""
     if random.random() < 0.5:
@@ -2373,6 +2565,7 @@ def _get_next_sentence(sentence, next_sentence, paragraphs):
         next_sentence = random.choice(random.choice(paragraphs))
         is_next = False
     return sentence, next_sentence, is_next
+
 
 def _get_nsp_data_from_paragraph(paragraph, paragraphs, vocab, max_len):
     """Defined in :numref:`sec_bert-dataset`"""
@@ -2386,6 +2579,7 @@ def _get_nsp_data_from_paragraph(paragraph, paragraphs, vocab, max_len):
         tokens, segments = d2l.get_tokens_and_segments(tokens_a, tokens_b)
         nsp_data_from_paragraph.append((tokens, segments, is_next))
     return nsp_data_from_paragraph
+
 
 def _replace_mlm_tokens(tokens, candidate_pred_positions, num_mlm_preds,
                         vocab):
@@ -2416,6 +2610,7 @@ def _replace_mlm_tokens(tokens, candidate_pred_positions, num_mlm_preds,
             (mlm_pred_position, tokens[mlm_pred_position]))
     return mlm_input_tokens, pred_positions_and_labels
 
+
 def _get_mlm_data_from_tokens(tokens, vocab):
     """Defined in :numref:`subsec_prepare_mlm_data`"""
     candidate_pred_positions = []
@@ -2436,36 +2631,39 @@ def _get_mlm_data_from_tokens(tokens, vocab):
     mlm_pred_labels = [v[1] for v in pred_positions_and_labels]
     return vocab[mlm_input_tokens], pred_positions, vocab[mlm_pred_labels]
 
+
 def _pad_bert_inputs(examples, max_len, vocab):
     """Defined in :numref:`subsec_prepare_mlm_data`"""
     max_num_mlm_preds = round(max_len * 0.15)
-    all_token_ids, all_segments, valid_lens,  = [], [], []
+    all_token_ids, all_segments, valid_lens, = [], [], []
     all_pred_positions, all_mlm_weights, all_mlm_labels = [], [], []
     nsp_labels = []
     for (token_ids, pred_positions, mlm_pred_label_ids, segments,
          is_next) in examples:
         all_token_ids.append(torch.tensor(token_ids + [vocab['<pad>']] * (
-            max_len - len(token_ids)), dtype=torch.long))
+                max_len - len(token_ids)), dtype=torch.long))
         all_segments.append(torch.tensor(segments + [0] * (
-            max_len - len(segments)), dtype=torch.long))
+                max_len - len(segments)), dtype=torch.long))
         # `valid_lens` excludes count of '<pad>' tokens
         valid_lens.append(torch.tensor(len(token_ids), dtype=torch.float32))
         all_pred_positions.append(torch.tensor(pred_positions + [0] * (
-            max_num_mlm_preds - len(pred_positions)), dtype=torch.long))
+                max_num_mlm_preds - len(pred_positions)), dtype=torch.long))
         # Predictions of padded tokens will be filtered out in the loss via
         # multiplication of 0 weights
         all_mlm_weights.append(
             torch.tensor([1.0] * len(mlm_pred_label_ids) + [0.0] * (
-                max_num_mlm_preds - len(pred_positions)),
-                dtype=torch.float32))
+                    max_num_mlm_preds - len(pred_positions)),
+                         dtype=torch.float32))
         all_mlm_labels.append(torch.tensor(mlm_pred_label_ids + [0] * (
-            max_num_mlm_preds - len(mlm_pred_label_ids)), dtype=torch.long))
+                max_num_mlm_preds - len(mlm_pred_label_ids)), dtype=torch.long))
         nsp_labels.append(torch.tensor(is_next, dtype=torch.long))
     return (all_token_ids, all_segments, valid_lens, all_pred_positions,
             all_mlm_weights, all_mlm_labels, nsp_labels)
 
+
 class _WikiTextDataset(torch.utils.data.Dataset):
     """Defined in :numref:`subsec_prepare_mlm_data`"""
+
     def __init__(self, paragraphs, max_len):
         # Input `paragraphs[i]` is a list of sentence strings representing a
         # paragraph; while output `paragraphs[i]` is a list of sentences
@@ -2483,8 +2681,8 @@ class _WikiTextDataset(torch.utils.data.Dataset):
                 paragraph, paragraphs, self.vocab, max_len))
         # Get data for the masked language model task
         examples = [(_get_mlm_data_from_tokens(tokens, self.vocab)
-                      + (segments, is_next))
-                     for tokens, segments, is_next in examples]
+                     + (segments, is_next))
+                    for tokens, segments, is_next in examples]
         # Pad inputs
         (self.all_token_ids, self.all_segments, self.valid_lens,
          self.all_pred_positions, self.all_mlm_weights,
@@ -2500,6 +2698,7 @@ class _WikiTextDataset(torch.utils.data.Dataset):
     def __len__(self):
         return len(self.all_token_ids)
 
+
 def load_data_wiki(batch_size, max_len):
     """Load the WikiText-2 dataset.
 
@@ -2509,8 +2708,9 @@ def load_data_wiki(batch_size, max_len):
     paragraphs = _read_wiki(data_dir)
     train_set = _WikiTextDataset(paragraphs, max_len)
     train_iter = torch.utils.data.DataLoader(train_set, batch_size,
-                                        shuffle=True, num_workers=num_workers)
+                                             shuffle=True, num_workers=num_workers)
     return train_iter, train_set.vocab
+
 
 def _get_batch_loss_bert(net, loss, vocab_size, tokens_X,
                          segments_X, valid_lens_x,
@@ -2522,17 +2722,19 @@ def _get_batch_loss_bert(net, loss, vocab_size, tokens_X,
                                   valid_lens_x.reshape(-1),
                                   pred_positions_X)
     # Compute masked language model loss
-    mlm_l = loss(mlm_Y_hat.reshape(-1, vocab_size), mlm_Y.reshape(-1)) *\
-    mlm_weights_X.reshape(-1, 1)
+    mlm_l = loss(mlm_Y_hat.reshape(-1, vocab_size), mlm_Y.reshape(-1)) * \
+            mlm_weights_X.reshape(-1, 1)
     mlm_l = mlm_l.sum() / (mlm_weights_X.sum() + 1e-8)
     # Compute next sentence prediction loss
     nsp_l = loss(nsp_Y_hat, nsp_y)
     l = mlm_l + nsp_l
     return mlm_l, nsp_l, l
 
+
 d2l.DATA_HUB['aclImdb'] = (
     'http://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz',
     '01ada507287d82875905620988597833ad4e0903')
+
 
 def read_imdb(data_dir, is_train):
     """Read the IMDb review dataset text sequences and labels.
@@ -2548,6 +2750,7 @@ def read_imdb(data_dir, is_train):
                 data.append(review)
                 labels.append(1 if label == 'pos' else 0)
     return data, labels
+
 
 def load_data_imdb(batch_size, num_steps=500):
     """Return data iterators and the vocabulary of the IMDb review dataset.
@@ -2570,6 +2773,7 @@ def load_data_imdb(batch_size, num_steps=500):
                                is_train=False)
     return train_iter, test_iter, vocab
 
+
 def predict_sentiment(net, vocab, sequence):
     """Predict the sentiment of a text sequence.
 
@@ -2578,14 +2782,17 @@ def predict_sentiment(net, vocab, sequence):
     label = torch.argmax(net(sequence.reshape(1, -1)), dim=1)
     return 'positive' if label == 1 else 'negative'
 
+
 d2l.DATA_HUB['SNLI'] = (
     'https://nlp.stanford.edu/projects/snli/snli_1.0.zip',
     '9fcde07509c7e87ec61c640c1b2753d9041758e4')
+
 
 def read_snli(data_dir, is_train):
     """Read the SNLI dataset into premises, hypotheses, and labels.
 
     Defined in :numref:`sec_natural-language-inference-and-dataset`"""
+
     def extract_text(s):
         # Remove information that will not be used by us
         s = re.sub('\\(', '', s)
@@ -2593,9 +2800,10 @@ def read_snli(data_dir, is_train):
         # Substitute two or more consecutive whitespace with space
         s = re.sub('\\s{2,}', ' ', s)
         return s.strip()
+
     label_set = {'entailment': 0, 'contradiction': 1, 'neutral': 2}
     file_name = os.path.join(data_dir, 'snli_1.0_train.txt'
-                             if is_train else 'snli_1.0_test.txt')
+    if is_train else 'snli_1.0_test.txt')
     with open(file_name, 'r') as f:
         rows = [row.split('\t') for row in f.readlines()[1:]]
     premises = [extract_text(row[1]) for row in rows if row[0] in label_set]
@@ -2603,10 +2811,12 @@ def read_snli(data_dir, is_train):
     labels = [label_set[row[0]] for row in rows if row[0] in label_set]
     return premises, hypotheses, labels
 
+
 class SNLIDataset(torch.utils.data.Dataset):
     """A customized dataset to load the SNLI dataset.
 
     Defined in :numref:`sec_natural-language-inference-and-dataset`"""
+
     def __init__(self, dataset, num_steps, vocab=None):
         self.num_steps = num_steps
         all_premise_tokens = d2l.tokenize(dataset[0])
@@ -2624,13 +2834,14 @@ class SNLIDataset(torch.utils.data.Dataset):
     def _pad(self, lines):
         return torch.tensor([d2l.truncate_pad(
             self.vocab[line], self.num_steps, self.vocab['<pad>'])
-                         for line in lines])
+            for line in lines])
 
     def __getitem__(self, idx):
         return (self.premises[idx], self.hypotheses[idx]), self.labels[idx]
 
     def __len__(self):
         return len(self.premises)
+
 
 def load_data_snli(batch_size, num_steps=50):
     """Download the SNLI dataset and return data iterators and vocabulary.
@@ -2650,6 +2861,7 @@ def load_data_snli(batch_size, num_steps=50):
                                             num_workers=num_workers)
     return train_iter, test_iter, train_set.vocab
 
+
 def predict_snli(net, vocab, premise, hypothesis):
     """Predict the logical relationship between the premise and hypothesis.
 
@@ -2658,9 +2870,10 @@ def predict_snli(net, vocab, premise, hypothesis):
     premise = torch.tensor(vocab[premise], device=d2l.try_gpu())
     hypothesis = torch.tensor(vocab[hypothesis], device=d2l.try_gpu())
     label = torch.argmax(net([premise.reshape((1, -1)),
-                           hypothesis.reshape((1, -1))]), dim=1)
+                              hypothesis.reshape((1, -1))]), dim=1)
     return 'entailment' if label == 0 else 'contradiction' if label == 1 \
-            else 'neutral'
+        else 'neutral'
+
 
 def update_D(X, Z, net_D, net_G, loss, trainer_D):
     """Update discriminator.
@@ -2681,6 +2894,7 @@ def update_D(X, Z, net_D, net_G, loss, trainer_D):
     trainer_D.step()
     return loss_D
 
+
 def update_G(Z, net_D, net_G, loss, trainer_G):
     """Update generator.
 
@@ -2697,9 +2911,9 @@ def update_G(Z, net_D, net_G, loss, trainer_G):
     trainer_G.step()
     return loss_G
 
-d2l.DATA_HUB['pokemon'] = (d2l.DATA_URL + 'pokemon.zip',
-                           'c065c0e2593b8b161a2d7873e42418bf6a21106c')# Alias defined in config.ini
 
+d2l.DATA_HUB['pokemon'] = (d2l.DATA_URL + 'pokemon.zip',
+                           'c065c0e2593b8b161a2d7873e42418bf6a21106c')  # Alias defined in config.ini
 
 ones = torch.ones
 zeros = torch.zeros
@@ -2731,4 +2945,3 @@ reduce_sum = lambda x, *args, **kwargs: x.sum(*args, **kwargs)
 argmax = lambda x, *args, **kwargs: x.argmax(*args, **kwargs)
 astype = lambda x, *args, **kwargs: x.type(*args, **kwargs)
 transpose = lambda x, *args, **kwargs: x.t(*args, **kwargs)
-

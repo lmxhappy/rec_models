@@ -2,15 +2,41 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/AFM/attentional_factorization_machine" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/AutoInt" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Co-Action-Network" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/ComiRec" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/DSSM-Lookalike" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/FFM/FM_FFM" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/FFM/libffm" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Item2Vec.bak" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/MIND" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/MVKE" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Node2vec/deepctr_node2vec/GraphEmbedding" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Node2vec/node2vec" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Node2vec/official_node2vec" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Pytorch-NCE" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Sampled-Softmax-PyTorch" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/attentional_factorization_machine" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/chinese-word2vec-pytorch" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/collaborative-filtering/AutoRec" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/collaborative-filtering/Autorec_tf" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/collaborative-filtering/neural_collaborative_filtering" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/collaborative-filtering/review-on-collaborative-filtering" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/dien" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/dlrm" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/eges/EGES_2" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/gbdt/xgb/WeChat-zhihu-csdnblog-code" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/item2vec" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/murmur3" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/neural_factorization_machine" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/product-nets" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/tensorflow-DeepFM" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/word2vec/tf_word2vec_negsample" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/word2vec/tfword2vec_skip-gram_nceloss" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/word2vec/word2vec-pytorch-sgns" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/word2vec/word2vec-pytorch_bceloss_cbowmean" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/word2vec/word2vec_pytorch" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/youtube/Deep_Rec" vcs="Git" />
   </component>
 </project>

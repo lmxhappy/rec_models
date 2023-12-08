@@ -148,13 +148,14 @@ class DecoderBlock(nn.Module):
         else:
             dec_valid_lens = None
 
-        # 自注意力
+        # 自注意力。X作为queries，key_values是keys, key_values是values, dec_valid_lens是valid_lens
         X2 = self.attention1(X, key_values, key_values, dec_valid_lens)
         Y = self.addnorm1(X, X2)
-        # 编码器－解码器注意力。
-        # enc_outputs的开头:(batch_size,num_steps,num_hiddens)
-        Y2 = self.attention2(Y, enc_outputs, enc_outputs, enc_valid_lens)
 
+        # 编码器－解码器注意力。
+        # enc_outputs的开头:(batch_size,num_steps,num_hiddens)。
+        # Y作为queries，enc_outputs是keys, enc_outputs是values, enc_valid_lens是valid_lens
+        Y2 = self.attention2(Y, enc_outputs, enc_outputs, enc_valid_lens)
 
         Z = self.addnorm2(Y, Y2)
         return self.addnorm3(Z, self.ffn(Z)), state
@@ -194,7 +195,7 @@ class TransformerDecoder(d2l.AttentionDecoder):
             self._attention_weights[0][i] = blk.attention1.attention.attention_weights
             # “编码器－解码器”自注意力权重
             self._attention_weights[1][i] = blk.attention2.attention.attention_weights
-
+        # 在decoder的output外套了一层dense层
         return self.dense(X), state
 
     @property
@@ -202,42 +203,58 @@ class TransformerDecoder(d2l.AttentionDecoder):
         return self._attention_weights
 
 
-def main():
+def make_network(src_vocab_len, target_vocab_len):
     """
     训练
     依照Transformer架构来实例化编码器－解码器模型。在这里，指定Transformer的编码器和解码器都是2层，都使用4头注意力。
     与 :numref:`sec_seq2seq_training`类似，为了进行序列到序列的学习，下面在“英语－法语”机器翻译数据集上训练Transformer模型。
     """
     num_hiddens, num_layers, dropout, batch_size, num_steps = 32, 2, 0.1, 64, 10
-    lr, num_epochs, device = 0.005, 200, d2l.try_gpu()
+    # lr, num_epochs, device = 0.005, 200, d2l.try_gpu()
     ffn_num_input, ffn_num_hiddens, num_heads = 32, 64, 4
-    key_size, query_size, value_size = 32, 32, 32 # embed_size
+    key_size, query_size, value_size = 32, 32, 32  # embed_size
     norm_shape = [32]
+
+    encoder = TransformerEncoder(src_vocab_len
+                                 , key_size, query_size, value_size, num_hiddens,
+                                 norm_shape, ffn_num_input, ffn_num_hiddens, num_heads,
+                                 num_layers, dropout)
+
+    decoder = TransformerDecoder(target_vocab_len
+                                 , key_size, query_size, value_size, num_hiddens,
+                                 norm_shape, ffn_num_input, ffn_num_hiddens, num_heads,
+                                 num_layers, dropout)
+
+    net = d2l.EncoderDecoder(encoder, decoder)
+
+    return net
+
+
+def main():
+    num_hiddens, num_layers, dropout, batch_size, num_steps = 32, 2, 0.1, 64, 10
+    batch_size = 2
+    lr, num_epochs, device = 0.005, 200, d2l.try_gpu()
+    # ffn_num_input, ffn_num_hiddens, num_heads = 32, 64, 4
 
     train_iter, src_vocab, tgt_vocab = d2l.load_data_nmt(batch_size, num_steps)
 
-    encoder = TransformerEncoder(
-        len(src_vocab), key_size, query_size, value_size, num_hiddens,
-        norm_shape, ffn_num_input, ffn_num_hiddens, num_heads,
-        num_layers, dropout)
-    decoder = TransformerDecoder(
-        len(tgt_vocab), key_size, query_size, value_size, num_hiddens,
-        norm_shape, ffn_num_input, ffn_num_hiddens, num_heads,
-        num_layers, dropout)
+    net = make_network(len(src_vocab), len(tgt_vocab))
 
-    net = d2l.EncoderDecoder(encoder, decoder)
     d2l.train_seq2seq(net, train_iter, lr, num_epochs, tgt_vocab, device)
 
-    val_model(net, src_vocab, tgt_vocab, num_steps, device, num_layers, num_heads)
+    # val_model(net, src_vocab, tgt_vocab, num_steps, device, num_layers, num_heads)
 
 
 def val_model(net, src_vocab, tgt_vocab, num_steps, device, num_layers, num_heads):
     """
     训练结束后，使用Transformer模型[**将一些英语句子翻译成法语**]，并且计算它们的BLEU分数。
     """
-
+    # 英语
     engs = ['go .', "i lost .", 'he\'s calm .', 'i\'m home .']
+
+    # 对应的法语
     fras = ['va !', 'j\'ai perdu .', 'il est calme .', 'je suis chez moi .']
+
     for eng, fra in zip(engs, fras):
         translation, dec_attention_weight_seq = d2l.predict_seq2seq(
             net, eng, src_vocab, tgt_vocab, num_steps, device, True)
@@ -290,9 +307,6 @@ def my_tsst():
     add_norm.eval()
     add_norm(torch.ones((2, 3, 4)), torch.ones((2, 3, 4))).shape
 
-    """## 编码器
-    """
-
 
 def my_test2():
     """下面我们指定了超参数来[**创建一个两层的Transformer编码器**]。
@@ -342,8 +356,42 @@ def my_test5():
     bn = nn.BatchNorm1d(2)
     X = torch.tensor([[1, 2], [2, 3]], dtype=torch.float32)
     # 在训练模式下计算X的均值和方差
-    print('layer norm:', ln(X), '\nbatch norm:', bn(X))
+    print('layer norm:', ln(X))
+    print('\nbatch norm:', bn(X))
+
+
+def my_test6():
+    label = torch.tensor([[0, 15, 8, 4, 3, 1, 1, 1, 1, 1],
+                          [64, 53, 4, 3, 1, 1, 1, 1, 1, 1]])
+    pred = torch.randn((2, 201, 10))
+    unweighted_loss = nn.CrossEntropyLoss()(pred, label)
+    print(unweighted_loss)
+
+
+def my_test7():
+    # import allennlp
+    # from allennlp.nn.module import
+    from allennlp.modules import LayerNorm
+    layer_norm = LayerNorm(2)
+
+    X = torch.tensor([[1, 2], [2, 3]], dtype=torch.float32)
+
+
+def my_test8():
+
+    a = torch.randn(size=(2,10,32))
+    ln = nn.LayerNorm(32)
+    out = ln(a)
+
+    from allennlp.modules import LayerNorm
+    layer_norm = LayerNorm(32)
+    mean = a.mean(-1, keepdim=True)
+
+    out2 = layer_norm(a)
 
 
 if __name__ == '__main__':
-    main()
+    # main()
+    # my_test6()
+    # my_test5()
+    my_test8()
