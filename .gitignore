@@ -36,3 +36,11 @@ embed_vis/checkpoint
 word2vec/tf_word2vec_negsample/280.txt
 word2vec/tf_word2vec_negsample/myvec
 tensorflow-DeepFM/example/data
+ComiRec/best_model
+ComiRec/data
+ Co-Action-Network/data
+ AutoInt/AutoInt_2/featureRec/movielens
+ AutoInt/AutoInt_2/sequentialRec
+ AutoInt/AutoInt_2/socialRec
+ AFM/attentional_factorization_machine/data
+
