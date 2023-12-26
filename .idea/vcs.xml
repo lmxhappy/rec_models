@@ -37,6 +37,7 @@
     <mapping directory="$PROJECT_DIR$/word2vec/word2vec-pytorch-sgns" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/word2vec/word2vec-pytorch_bceloss_cbowmean" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/word2vec/word2vec_pytorch" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/xDeepfm/impl_1/xDeepFM" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/youtube/Deep_Rec" vcs="Git" />
   </component>
 </project>
