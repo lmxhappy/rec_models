@@ -40,7 +40,7 @@ class PositionWiseFFN(nn.Module):
 
 class AddNorm(nn.Module):
     """残差连接后进行层规范化
-    现在可以[**使用残差连接和层规范化**]来实现`AddNorm`类。暂退法也被作为正则化方法使用。
+    现在可以[**使用残差连接和层规范化**]来实现`AddNorm`类。dropout也被作为正则化方法使用。
 
     """
 
@@ -317,7 +317,8 @@ def my_test2():
         200, 24, 24, 24, 24, [100, 24], 24, 48, 8, 2, 0.5)
     encoder.eval()
 
-    # encoder(torch.ones((2, 100), dtype=torch.long), valid_lens).shape
+    valid_lens = 10
+    encoder(torch.ones((2, 100), dtype=torch.long), valid_lens).shape
 
 
 def my_test3():
@@ -389,9 +390,23 @@ def my_test8():
 
     out2 = layer_norm(a)
 
+def my_test_PositionWiseFFN():
+    """下面的例子显示，[**改变张量的最里层维度的尺寸**]，会改变成基于位置的前馈网络的输出尺寸。因为用同一个多层感知机对所有位置上的输入进行变换，所以当所有这些位置的输入相同时，它们的输出也是相同的。
+
+    """
+
+    ffn = PositionWiseFFN(4, 4, 8)
+    # ffn.eval()
+    ret = ffn(torch.ones((2, 3, 4)))
+    print(ret)
+    print(ret.shape)
+    # [0]
+
 
 if __name__ == '__main__':
     # main()
     # my_test6()
     # my_test5()
-    my_test8()
+    # my_test8()
+    # my_test2()
+    my_test_PositionWiseFFN()

@@ -1,0 +1,2 @@
+ 20240322-173057,[command] python /Users/conan/Desktop/codes/rec_models/eta/ETA/run_expid.py --expid ETA_test,[exp_id] ETA_test,[dataset_id] tiny_seq,[train] N.A.,[val] logloss: 0.688907 - AUC: 0.921875,[test] logloss: 0.688907 - AUC: 0.921875
+ 20240327-165344,[command] python /Users/conan/Desktop/codes/rec_models/eta/ETA/run_expid.py --expid ETA_test,[exp_id] ETA_test,[dataset_id] tiny_seq,[train] N.A.,[val] logloss: 0.688907 - AUC: 0.921875,[test] logloss: 0.688907 - AUC: 0.921875

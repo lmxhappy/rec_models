@@ -1,0 +1,1 @@
+ 20240327-172938,[command] python /Users/conan/Desktop/codes/rec_models/SDIM/run_expid.py --expid SDIM_test,[exp_id] SDIM_test,[dataset_id] tiny_seq,[train] N.A.,[val] logloss: 0.689401 - AUC: 0.843750,[test] logloss: 0.689401 - AUC: 0.843750
