@@ -96,7 +96,7 @@ class SDIM(BaseModel):
             else:
                 input_dim = embedding_dim
             self.random_rotations.append(nn.Parameter(torch.randn(input_dim, self.num_hashes, 
-                                                      self.hash_bits), requires_grad=False))
+                                                      self.hash_bits), requires_grad=False)) # hash_bits对应一个位置
         self.dnn = MLP_Block(input_dim=feature_map.sum_emb_out_dim(),
                              output_dim=1,
                              hidden_units=dnn_hidden_units,
@@ -111,7 +111,7 @@ class SDIM(BaseModel):
     def forward(self, inputs):
         X = self.get_inputs(inputs)
         feature_emb_dict = self.embedding_layer(X)
-        # short interest attention
+        # short interest attention。本例子里，short_target_field和short_sequence_field是空的
         for idx, (target_field, sequence_field) in enumerate(zip(self.short_target_field, 
                                                                  self.short_sequence_field)):
             target_emb = self.concat_embedding(target_field, feature_emb_dict)
@@ -130,8 +130,8 @@ class SDIM(BaseModel):
             sequence_emb = self.concat_embedding(sequence_field, feature_emb_dict)
             seq_field = list(flatten([sequence_field]))[0] # flatten nested list to pick the first field
             mask = X[seq_field].long() != 0 # padding_idx = 0 required in input data
-            long_interest_emb = self.lsh_attentioin(self.random_rotations[idx], 
-                                                    target_emb, sequence_emb, mask)
+            long_interest_emb = self.lsh_attentioin(self.random_rotations[idx], target_emb, sequence_emb, mask) # 【B，embed_size】，B：100， embed_size：4
+            tmp = long_interest_emb.split(self.embedding_dim, dim=-1)
             for field, field_emb in zip(list(flatten([sequence_field])),
                                         long_interest_emb.split(self.embedding_dim, dim=-1)):
                 feature_emb_dict[field] = field_emb
@@ -148,19 +148,32 @@ class SDIM(BaseModel):
             return feature_emb_dict[field]
 
     def lsh_attentioin(self, random_rotations, target_item, history_sequence, mask):
+        """
+
+
+
+
+        @param mask: [B, seq_len]
+        """
         if not self.reuse_hash:
             random_rotations = torch.randn(target_item.size(1), self.num_hashes, 
                                            self.hash_bits, device=target_item.device)
         sequence_bucket = self.lsh_hash(history_sequence, random_rotations)
         target_bucket = self.lsh_hash(target_item.unsqueeze(1), random_rotations)
-        bucket_match = (sequence_bucket - target_bucket).permute(2, 0, 1) # num_hashes x B x seq_len
-        collide_mask = ((bucket_match == 0) * mask.unsqueeze(0)).float() # both hash collision mask and sequence mask
-        hash_index, collide_index = torch.nonzero(collide_mask.flatten(start_dim=1), as_tuple=True)
+        btmp = (sequence_bucket - target_bucket)  # [B, seq_len, num_hashes]
+        bucket_match = (sequence_bucket - target_bucket).permute(2, 0, 1)  # num_hashes x B x seq_len
+        bbtmp = (bucket_match == 0)
+        collide_mask = ((bucket_match == 0) * mask.unsqueeze(0)).float() # num_hashes x B x seq_len. both hash collision mask and sequence mask。collide的时候，说明落到一处去了。
+        ctmp = collide_mask.flatten(start_dim=1) # [num_hashes, B x seq_len]
+
+        hash_index, collide_index = torch.nonzero(collide_mask.flatten(start_dim=1), as_tuple=True)  # [?,] and [?,]
         offsets = collide_mask.sum(dim=-1).flatten().cumsum(dim=0)
         offsets = torch.cat([torch.zeros(1, device=offsets.device), offsets]).long()
-        attn_out = F.embedding_bag(collide_index, history_sequence.view(-1, target_item.size(1)), 
-                                   offsets, mode='sum', include_last_offset=True) # (num_hashes x B) x d
+
+        tmp = history_sequence.view(-1, target_item.size(1))
+        attn_out = F.embedding_bag(collide_index, history_sequence.view(-1, target_item.size(1)), offsets, mode='sum', include_last_offset=True) # (num_hashes x B) x d
         attn_out = attn_out.view(self.num_hashes, -1, target_item.size(1)).mean(dim=0) # B x d
+
         return attn_out
         
     def lsh_hash(self, vecs, random_rotations):
@@ -172,5 +185,7 @@ class SDIM(BaseModel):
         """
         rotated_vecs = torch.einsum("bld,dht->blht", vecs, random_rotations) # B x seq_len x num_hashes x hash_bits
         hash_code = torch.relu(torch.sign(rotated_vecs))
-        hash_bucket = torch.matmul(hash_code, self.powers_of_two.unsqueeze(-1)).squeeze(-1)
+        tmp = self.powers_of_two.unsqueeze(-1) # [4,1]
+        tmp2 = torch.matmul(hash_code, self.powers_of_two.unsqueeze(-1))
+        hash_bucket = torch.matmul(hash_code, self.powers_of_two.unsqueeze(-1)).squeeze(-1) # 这样做的目的是将一个二进制的数（存储在tensor）转成一个int数值
         return hash_bucket

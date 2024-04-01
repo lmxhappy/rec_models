@@ -6,10 +6,8 @@
     <mapping directory="$PROJECT_DIR$/AutoInt" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/Co-Action-Network" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/ComiRec" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/DSSM-Lookalike" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/FFM/FM_FFM" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/FFM/libffm" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/Item2Vec.bak" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/MIND" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/MVKE" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/Node2vec/deepctr_node2vec/GraphEmbedding" vcs="Git" />
@@ -18,6 +16,7 @@
     <mapping directory="$PROJECT_DIR$/Pytorch-NCE" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/Sampled-Softmax-PyTorch" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/attentional_factorization_machine" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/bak/Item2Vec.bak" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/chinese-word2vec-pytorch" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/collaborative-filtering/AutoRec" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/collaborative-filtering/Autorec_tf" vcs="Git" />
@@ -25,6 +24,7 @@
     <mapping directory="$PROJECT_DIR$/collaborative-filtering/review-on-collaborative-filtering" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/dien" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/dlrm" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/dssm/DSSM-Lookalike" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/eges/EGES_2" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/gbdt/xgb/WeChat-zhihu-csdnblog-code" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/item2vec" vcs="Git" />

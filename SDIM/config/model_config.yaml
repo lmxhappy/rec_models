@@ -23,7 +23,7 @@ SDIM_test:
     embedding_regularizer: 0
     net_regularizer: 0
     batch_size: 128
-    embedding_dim: 4
+    embedding_dim: 4  # !!!!!!!!
     dnn_hidden_units: [64, 32]
     dnn_activations: relu
     attention_dim: 64

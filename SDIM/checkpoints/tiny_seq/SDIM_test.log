@@ -1,4 +1,4 @@
-2024-03-27 17:29:18,299 P19012 INFO Params: {
+2024-03-28 17:23:50,100 P39485 INFO Params: {
     "attention_dim": "64",
     "attention_dropout": "0",
     "batch_norm": "False",
@@ -51,9 +51,9 @@
     "valid_data": "../data/tiny_seq/valid.npz",
     "verbose": "1"
 }
-2024-03-27 17:29:18,300 P19012 INFO Load feature_map from json: ../data/tiny_seq/feature_map.json
-2024-03-27 17:29:18,300 P19012 INFO Set column index...
-2024-03-27 17:29:18,300 P19012 INFO Feature specs: {
+2024-03-28 17:23:50,102 P39485 INFO Load feature_map from json: ../data/tiny_seq/feature_map.json
+2024-03-28 17:23:50,103 P39485 INFO Set column index...
+2024-03-28 17:23:50,103 P39485 INFO Feature specs: {
     "adgroup_id": "{'source': '', 'type': 'categorical', 'padding_idx': 0, 'vocab_size': 96}",
     "age_level": "{'source': '', 'type': 'categorical', 'padding_idx': 0, 'vocab_size': 7}",
     "brand": "{'source': '', 'type': 'categorical', 'padding_idx': 0, 'vocab_size': 67}",
@@ -70,24 +70,10 @@
     "shopping_level": "{'source': '', 'type': 'categorical', 'padding_idx': 0, 'vocab_size': 5}",
     "userid": "{'source': '', 'type': 'categorical', 'padding_idx': 0, 'vocab_size': 26}"
 }
-2024-03-27 17:29:19,675 P19012 INFO Total number of parameters: 7957.
-2024-03-27 17:29:19,675 P19012 INFO Loading datasets...
-2024-03-27 17:29:19,688 P19012 INFO Train samples: total/100, blocks/1
-2024-03-27 17:29:19,696 P19012 INFO Validation samples: total/100, blocks/1
-2024-03-27 17:29:19,696 P19012 INFO Loading train and validation data done.
-2024-03-27 17:29:19,696 P19012 INFO Start training: 1 batches/epoch
-2024-03-27 17:29:19,696 P19012 INFO ************ Epoch=1 start ************
-2024-03-27 17:29:24,015 P19012 INFO Train loss: 0.693125
-2024-03-27 17:29:24,016 P19012 INFO Evaluation @epoch 1 - batch 1: 
-2024-03-27 17:29:28,541 P19012 INFO [Metrics] AUC: 0.843750
-2024-03-27 17:29:28,542 P19012 INFO Save best model: monitor(max)=0.843750
-2024-03-27 17:29:29,020 P19012 INFO ************ Epoch=1 end ************
-2024-03-27 17:29:29,021 P19012 INFO Training finished.
-2024-03-27 17:29:29,021 P19012 INFO Load best model: /Users/conan/Desktop/codes/rec_models/SDIM/checkpoints/tiny_seq/SDIM_test.model
-2024-03-27 17:29:29,025 P19012 INFO ****** Validation evaluation ******
-2024-03-27 17:29:32,922 P19012 INFO [Metrics] logloss: 0.689401 - AUC: 0.843750
-2024-03-27 17:29:33,070 P19012 INFO ******** Test evaluation ********
-2024-03-27 17:29:33,070 P19012 INFO Loading datasets...
-2024-03-27 17:29:33,082 P19012 INFO Test samples: total/100, blocks/1
-2024-03-27 17:29:33,082 P19012 INFO Loading test data done.
-2024-03-27 17:29:38,080 P19012 INFO [Metrics] logloss: 0.689401 - AUC: 0.843750
+2024-03-28 17:23:53,172 P39485 INFO Total number of parameters: 7957.
+2024-03-28 17:23:53,172 P39485 INFO Loading datasets...
+2024-03-28 17:23:53,189 P39485 INFO Train samples: total/100, blocks/1
+2024-03-28 17:23:53,201 P39485 INFO Validation samples: total/100, blocks/1
+2024-03-28 17:23:53,201 P39485 INFO Loading train and validation data done.
+2024-03-28 17:23:53,201 P39485 INFO Start training: 1 batches/epoch
+2024-03-28 17:23:53,201 P39485 INFO ************ Epoch=1 start ************
